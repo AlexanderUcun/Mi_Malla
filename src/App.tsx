@@ -28,7 +28,7 @@ const MainContent: React.FC = () => {
               animation: 'pulse 1.5s infinite'
             }}
           >
-            <img src="/logo.svg" alt="Loading logo" style={{ width: '36px', height: '36px' }} />
+            <img src="./logo.svg" alt="Loading logo" style={{ width: '36px', height: '36px' }} />
           </div>
           <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Cargando Mi Malla...</p>
         </div>

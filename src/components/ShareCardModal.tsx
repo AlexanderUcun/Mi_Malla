@@ -93,7 +93,7 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({ isOpen, onClose 
               {/* Header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <img src="/logo.svg" alt="Logo" style={{ width: '36px', height: '36px' }} />
+                  <img src="./logo.svg" alt="Logo" style={{ width: '36px', height: '36px' }} />
                   <div>
                     <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>Mi Malla</h3>
                     <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Ficha de Estudiante</span>

@@ -35,7 +35,7 @@ export const HeaderXP: React.FC = () => {
             border: '1px solid var(--border-card)'
           }}
         >
-          <img src="/logo.svg" alt="Mi Malla Logo" style={{ width: '100%', height: '100%' }} />
+          <img src="./logo.svg" alt="Mi Malla Logo" style={{ width: '100%', height: '100%' }} />
         </div>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
