@@ -10,6 +10,7 @@ import {
   getAllCourses,
   calculateCourseState,
   getAffectedDownstreamCourses,
+  getAncestorPrerequisites,
   calculateCurriculumMetrics
 } from '../lib/curriculumEngine'
 import {
@@ -40,6 +41,12 @@ interface CurriculumContextType {
   toggleTheme: () => void
   inspectedCourseCode: string | null
   setInspectedCourseCode: (code: string | null) => void
+
+  // Chain Glow Focus State
+  focusedCourseCode: string | null
+  setFocusedCourseCode: (code: string | null) => void
+  ancestorPrereqCodes: Set<string>
+  descendantUnlockCodes: Set<string>
   
   // Actions
   toggleCourseStatus: (code: string) => Promise<void>
@@ -71,6 +78,7 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [activeTab, setActiveTab] = useState<'malla' | 'logros' | 'analytics' | 'settings'>('malla')
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [inspectedCourseCode, setInspectedCourseCode] = useState<string | null>(null)
+  const [focusedCourseCode, setFocusedCourseCode] = useState<string | null>(null)
   const [isSimulationMode, setIsSimulationMode] = useState<boolean>(false)
   const [simulatedStatuses, setSimulatedStatuses] = useState<Map<string, CourseStatusType>>(new Map())
   const [undoState, setUndoState] = useState<{ code: string; previousStatus: CourseStatusType } | null>(null)
@@ -127,6 +135,17 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     [allCourses, userStatusMap]
   )
   const metrics = useMemo(() => calculateCurriculumMetrics(userStatusMap), [userStatusMap])
+
+  // Chain Glow Ancestors & Descendants calculation
+  const { ancestorPrereqCodes, descendantUnlockCodes } = useMemo(() => {
+    if (!focusedCourseCode) {
+      return { ancestorPrereqCodes: new Set<string>(), descendantUnlockCodes: new Set<string>() }
+    }
+    return {
+      ancestorPrereqCodes: getAncestorPrerequisites(focusedCourseCode),
+      descendantUnlockCodes: getAffectedDownstreamCourses(focusedCourseCode)
+    }
+  }, [focusedCourseCode])
 
   // Theme toggle
   const toggleTheme = () => {
@@ -247,6 +266,10 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         toggleTheme,
         inspectedCourseCode,
         setInspectedCourseCode,
+        focusedCourseCode,
+        setFocusedCourseCode,
+        ancestorPrereqCodes,
+        descendantUnlockCodes,
         toggleCourseStatus,
         setCourseStatus,
         setCourseExtras,

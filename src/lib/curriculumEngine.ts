@@ -120,6 +120,30 @@ export function getAffectedDownstreamCourses(courseCode: string): Set<string> {
 }
 
 /**
+ * RECURSIVE BACKWARD GRAPH TRAVERSAL (BFS/DFS)
+ * Finds ALL prerequisite courses required directly or indirectly before `courseCode`.
+ * Used for backward Chain Glow highlighting (Predecessors).
+ */
+export function getAncestorPrerequisites(courseCode: string): Set<string> {
+  const ancestors = new Set<string>()
+  const queue: string[] = [courseCode]
+
+  while (queue.length > 0) {
+    const current = queue.shift()!
+    const directPrereqs = prereqMap.get(current) || []
+
+    for (const pCode of directPrereqs) {
+      if (!ancestors.has(pCode)) {
+        ancestors.add(pCode)
+        queue.push(pCode)
+      }
+    }
+  }
+
+  return ancestors
+}
+
+/**
  * Calculates total credits and breakdown by area/category
  */
 export function calculateCurriculumMetrics(userStatusMap: Map<string, CourseStatusType>) {

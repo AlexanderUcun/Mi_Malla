@@ -1,5 +1,6 @@
-import React from 'react'
-import { CheckCircle2, Lock, Zap, Swords, AlertCircle, Edit3 } from 'lucide-react'
+import React, { useRef } from 'react'
+import { motion } from 'framer-motion'
+import { CheckCircle2, Lock, Zap, Swords, AlertCircle, Edit3, ArrowLeft, ArrowRight } from 'lucide-react'
 import type { Course } from '../types/curriculum'
 import { useCurriculum } from '../context/CurriculumContext'
 
@@ -12,15 +13,58 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     computedStateMap,
     customNamesMap,
     toggleCourseStatus,
-    setInspectedCourseCode
+    setInspectedCourseCode,
+    focusedCourseCode,
+    setFocusedCourseCode,
+    ancestorPrereqCodes,
+    descendantUnlockCodes
   } = useCurriculum()
+
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null)
 
   const state = computedStateMap.get(course.code) || 'locked'
   const customName = customNamesMap.get(course.code)
   const displayName = customName || course.name
 
+  // Chain Glow Directional Focus Status
+  const isFocusedSelf = focusedCourseCode === course.code
+  const isAncestorPrereq = ancestorPrereqCodes.has(course.code)
+  const isDescendantUnlock = descendantUnlockCodes.has(course.code)
+
+  const handleMouseEnter = () => {
+    setFocusedCourseCode(course.code)
+  }
+
+  const handleMouseLeave = () => {
+    if (focusedCourseCode === course.code) {
+      setFocusedCourseCode(null)
+    }
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    touchStartPos.current = { x: touch.clientX, y: touch.clientY }
+  }
+
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation()
+    // 8px Touch Scroll Guard: if touch moved more than 8px, ignore click (it was a scroll)
+    if (touchStartPos.current) {
+      const touch = (e as any).changedTouches?.[0]
+      if (touch) {
+        const dx = Math.abs(touch.clientX - touchStartPos.current.x)
+        const dy = Math.abs(touch.clientY - touchStartPos.current.y)
+        if (dx > 8 || dy > 8) {
+          touchStartPos.current = null
+          return
+        }
+      }
+    }
+
+    // If tapping a card, toggle Chain Glow focus on mobile
+    if (focusedCourseCode !== course.code) {
+      setFocusedCourseCode(course.code)
+    }
     setInspectedCourseCode(course.code)
   }
 
@@ -32,13 +76,13 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       try {
         navigator.vibrate(15)
       } catch {
-        // ignore if not supported
+        // ignore
       }
     }
     await toggleCourseStatus(course.code)
   }
 
-  // Dynamic Styles per State
+  // Base Visual Tokens per State
   let bg = 'var(--node-unlocked-bg)'
   let borderColor = 'var(--node-unlocked-border)'
   let shadow = 'var(--shadow-sm)'
@@ -61,8 +105,27 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     borderColor = 'var(--node-failed-border)'
   }
 
+  // GPU-Accelerated Directional Chain Glow Overrides
+  if (isFocusedSelf) {
+    borderColor = 'var(--color-terracotta)'
+    shadow = '0 0 0 3px rgba(115, 72, 47, 0.40)'
+  } else if (isAncestorPrereq) {
+    borderColor = '#D97706'
+    shadow = 'var(--shadow-glow-req)'
+    opacity = 1
+  } else if (isDescendantUnlock) {
+    borderColor = 'var(--color-terracotta)'
+    shadow = 'var(--shadow-glow-next)'
+    opacity = 1
+  }
+
   return (
-    <div
+    <motion.div
+      whileHover={{ scale: state === 'locked' ? 1 : 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
       onClick={handleCardClick}
       className="transition-all"
       style={{
@@ -78,10 +141,56 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         flexDirection: 'column',
         justifyContent: 'space-between',
         gap: '10px',
-        minHeight: '145px'
+        minHeight: '145px',
+        willChange: 'transform, box-shadow, border-color'
       }}
     >
-      {/* Top Header: Category Badge & Credits */}
+      {/* Chain Glow Directional Badges */}
+      {isAncestorPrereq && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '-10px',
+            left: '12px',
+            backgroundColor: '#D97706',
+            color: '#FFFFFF',
+            fontSize: '10px',
+            fontWeight: 700,
+            padding: '2px 8px',
+            borderRadius: 'var(--radius-full)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <ArrowLeft size={10} /> Requisito Previo
+        </div>
+      )}
+
+      {isDescendantUnlock && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '-10px',
+            right: '12px',
+            backgroundColor: 'var(--color-terracotta)',
+            color: '#FFFFFF',
+            fontSize: '10px',
+            fontWeight: 700,
+            padding: '2px 8px',
+            borderRadius: 'var(--radius-full)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          Desbloquea <ArrowRight size={10} />
+        </div>
+      )}
+
+      {/* Top Header: Category & Credits */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
           {course.is_diagnostic ? (
@@ -237,6 +346,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }
