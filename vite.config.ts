@@ -18,12 +18,33 @@ export default defineConfig({
         background_color: '#F8F7F4',
         display: 'standalone',
         orientation: 'portrait-primary',
+        start_url: './',
+        scope: './',
+        id: './',
         icons: [
           {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
             src: 'logo.svg',
-            sizes: '192x192 512x512',
+            sizes: 'any',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
           }
         ]
       },

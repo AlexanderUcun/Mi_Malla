@@ -4,6 +4,7 @@ import { useCurriculum } from '../context/CurriculumContext'
 import { exportProgressJSON, bulkSaveCourseStatuses } from '../lib/db'
 import { ZUserProgressImport, type UserCourseRecord } from '../types/curriculum'
 import { ShareCardModal } from '../components/ShareCardModal'
+import { PWAInstallCard } from '../components/PWAInstallCard'
 
 export const SettingsPage: React.FC = () => {
   const {
@@ -68,6 +69,9 @@ export const SettingsPage: React.FC = () => {
           Gestiona tus datos 100% offline, experimenta con escenarios simulados o transfiere tu progreso.
         </p>
       </div>
+
+      {/* PWA Direct Installation Card */}
+      <PWAInstallCard />
 
       {/* Ficha de Personaje Compartible */}
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
