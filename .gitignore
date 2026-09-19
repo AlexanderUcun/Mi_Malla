@@ -1,4 +1,4 @@
-# Logs y temporales
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -7,32 +7,18 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencias de Node
 node_modules
 dist
 dist-ssr
 *.local
 
-# Bases de datos locales
-*.db
-*.sqlite
-*.sqlite3
-
-# Entornos y secretos
-.env
-.env.*
-!.env.example
-
-# IDE y editores
+# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-# Sistema operativo
-.DS_Store
-Thumbs.db

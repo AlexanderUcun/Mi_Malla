@@ -1,0 +1,161 @@
+/* ==========================================================================
+   MI MALLA — SYSTEM DESIGN & TOKENS (CLEAN & WARM LIGHT MODE + DARK MODE OPTION)
+   ========================================================================== */
+
+:root {
+  /* Official 5-Color Palette */
+  --color-slate-light: #A4ADBF; /* Soft borders, locked cards */
+  --color-slate-mid:   #7A98BF; /* Area badges, in-progress courses */
+  --color-steel:       #6D86A6; /* Structure, icons, borders, subheadings */
+  --color-sand:        #D9D3C7; /* Secondary card bg, subtle glow accents */
+  --color-terracotta:  #73482F; /* Key Accent: completed courses, buttons, XP bar */
+
+  /* Clean & Warm Light Mode Environment */
+  --bg-main:           #F8F7F4; /* Light ivory/sand main background */
+  --bg-card:           #FFFFFF; /* Pure white card surface */
+  --bg-card-muted:     #EFECE6; /* Locked / fogged cards */
+  --bg-card-hover:     #F3F0EA; /* Subtle hover state */
+  --border-card:       rgba(164, 173, 191, 0.35); /* Subtle border */
+  
+  --text-primary:      #232B38; /* Deep high-contrast text (WCAG AAA) */
+  --text-secondary:    #5A6B82; /* Subtitles, hours, metadata */
+  --text-terracotta:   #73482F; /* Highlighted text & headers */
+  --text-white:        #FFFFFF;
+
+  /* Node States Visual Tokens */
+  --node-locked-bg:    #EFECE6;
+  --node-locked-border:#A4ADBF;
+  --node-unlocked-bg:  #FFFFFF;
+  --node-unlocked-border: #6D86A6;
+  --node-progress-bg:  #FFFFFF;
+  --node-progress-border: #7A98BF;
+  --node-completed-bg: #FFFFFF;
+  --node-completed-border: #73482F;
+  --node-failed-bg:    #FDF2F2;
+  --node-failed-border: #E53E3E;
+
+  /* Typography Stack */
+  --font-heading:      'Outfit', system-ui, -apple-system, sans-serif;
+  --font-body:         'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Shadows & Elevation */
+  --shadow-sm:         0 1px 3px rgba(35, 43, 56, 0.05);
+  --shadow-md:         0 4px 12px rgba(35, 43, 56, 0.08);
+  --shadow-lg:         0 10px 25px rgba(35, 43, 56, 0.12);
+  --shadow-terracotta: 0 4px 14px rgba(115, 72, 47, 0.25);
+  --shadow-glow-req:   0 0 12px rgba(217, 211, 199, 0.85);
+  --shadow-glow-next:  0 0 16px rgba(115, 72, 47, 0.40);
+
+  /* Safe Area Insets (Mobile ergonomics) */
+  --safe-bottom:       max(16px, env(safe-area-inset-bottom));
+  --safe-top:          max(16px, env(safe-area-inset-top));
+
+  /* Border Radius System */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+}
+
+/* Dark Mode Infrastructure (Optional Toggle in Settings) */
+[data-theme="dark"] {
+  --bg-main:           #12161F;
+  --bg-card:           #1B222D;
+  --bg-card-muted:     #252E3E;
+  --bg-card-hover:     #2A3547;
+  --border-card:       rgba(122, 152, 191, 0.25);
+
+  --text-primary:      #F1F5F9;
+  --text-secondary:    #94A3B8;
+  --text-terracotta:   #E07A5F;
+
+  --node-locked-bg:    #18202C;
+  --node-locked-border:#3A4A62;
+  --node-unlocked-bg:  #1B222D;
+  --node-unlocked-border: #6D86A6;
+  --node-progress-bg:  #1B222D;
+  --node-progress-border: #7A98BF;
+  --node-completed-bg: #231C18;
+  --node-completed-border: #E07A5F;
+
+  --shadow-sm:         0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md:         0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-slate-light);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-steel);
+}
+
+/* Utility Animations & Transitions */
+.transition-all {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glassmorphism Navigation Bar */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-card);
+}
+
+[data-theme="dark"] .glass-panel {
+  background: rgba(27, 34, 45, 0.85);
+}
+
+/* Accessibility Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
