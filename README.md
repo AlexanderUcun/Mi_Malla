@@ -91,11 +91,16 @@ La aplicación organiza sus funcionalidades en **4 pantallas dedicadas** con nav
 
 ## 🛠️ Tecnologías y Rendimiento
 
-- **Frontend & Bundler**: [Vite](https://vitejs.dev/) + [React](https://react.dev/) (ultrarrápido y modular).
-- **Estilos**: Vanilla CSS modular con CSS Custom Properties (cero plantillas genéricas).
+- **Frontend & Bundler**: [Vite](https://vitejs.dev/) + [React](https://react.dev/) + TypeScript (ultrarrápido y modular).
+- **Estilos**: Vanilla CSS modular con CSS Custom Properties (Modo Claro por defecto + infraestructura de Modo Oscuro opcional).
+- **Base de Datos Local (Local-First)**: [Dexie.js](https://dexie.org/) (`IndexedDB` reactivo ultrarrobuso, libre de purgas de iOS Safari).
+- **Validación de Datos**: [Zod](https://zod.dev/) (validación runtime de esquema de plan de estudios y datos guardados).
+- **Visualización de Datos**: [Recharts](https://recharts.org/) (gráfico de Radar interactivo en panel de analíticas).
+- **Formularios & Inspector**: [React Hook Form](https://react-hook-form.com/) (gestión de notas y personalización de electivas).
 - **Física & Animaciones**: [Framer Motion](https://www.framer.com/motion/) (transiciones fluidas y micro-interacciones).
 - **Iconografía**: [Lucide React](https://lucide.dev/) (iconos de línea fina de 1.75px–2px).
 - **Celebración de Hitos**: [canvas-confetti](https://www.kirilv.com/canvas-confetti/).
+- **Pruebas Automatizadas**: [Vitest](https://vitest.dev/) + React Testing Library (verificación del motor de grafos).
 - **PWA & Offline**: `vite-plugin-pwa` con caché estática Workbox.
 - **Precarga en Memoria RAM**: Indexación en memoria mediante `Map` y `Set` de JavaScript para consultas de grafos en $O(1)$ a **0 ms de latencia**.
 

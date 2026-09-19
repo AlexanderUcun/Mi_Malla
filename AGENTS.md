@@ -31,10 +31,15 @@ Una aplicación móvil (PWA) para realizar el seguimiento del progreso a través
 
 ### Stack Tecnológico Acordado
 - **Framework & Bundler**: Vite + React (para máxima rapidez, ligereza y soporte PWA).
-- **Estilos**: Vanilla CSS modular con CSS Custom Properties (paleta personalizada sin frameworks genéricos).
+- **Estilos**: Vanilla CSS modular con CSS Custom Properties (paleta clara por defecto + infraestructura de Modo Oscuro opcional).
+- **Persistencia Local-First**: **Dexie.js** (`dexie` + `dexie-react-hooks`) como wrapper reactivo sobre `IndexedDB` (resistente a purgas de iOS Safari).
+- **Validación de Esquema**: `zod` para validación runtime de `seed_data.json` y estado guardado.
+- **Visualización de Datos**: `recharts` para el gráfico tipo Radar (tela de araña) en la pantalla de analíticas.
+- **Formularios & Inspector**: `react-hook-form` para la edición limpia de notas y personalización de electivas en el Drawer.
 - **Animaciones & Motion**: `framer-motion` (física fluida para desbloqueo, transiciones y foco en grafo).
-- **Iconografía**: `lucide-react` (iconos limpios y adaptables).
-- **Efectos de Hitos**: `canvas-confetti` (celebración visual al completar semestres o hitos de créditos).
+- **Iconografía**: `lucide-react` (iconos limpios y adaptables de trazo lineal 1.75px–2px).
+- **Efectos de Hitos**: `canvas-confetti` (celebración visual en semestres completados e hitos legendarios).
+- **Pruebas y Calidad**: `vitest` + `React Testing Library` para pruebas unitarias automatizadas del grafo de prerrequisitos.
 - **Offline & PWA**: `vite-plugin-pwa` (Service Worker, manifest, soporte de instalación mobile/desktop).
 
 ### Paleta de Colores Oficial (Diseño Claro / Light Mode)
@@ -68,10 +73,11 @@ La malla curricular funciona visual y conceptualmente como un **Árbol de Talent
   - *En Curso*: Borde y badge en **Azul Acero (`#7A98BF`)** (en batalla académica).
   - *Aprobada*: Borde y acento en **Terracota (`#73482F`)** con check de maestría.
 - **Motor de XP y Niveles**:
-  - `1 Crédito Académico = 100 XP` (Profundización otorga 800 XP).
-  - Escala de 10 Niveles de progreso (desde *Nivel 1: Recluta Universitario* hasta *Nivel 10: Administrador Legendario*).
+  - `1 Crédito Académico = 100 XP` (Profundización otorga 800 XP; Pénsum total = 15,800 XP).
+  - Escala de 10 Niveles con **curva de progreso progresiva/exponencial** (los últimos niveles requieren mayor acumulación de XP para reflejar la complejidad de materias avanzadas).
   - Barra de XP reactiva en el Header principal que se llena con animación en terracota.
-- **Catálogo de Logros (Achievements)**:
+- **Catálogo de Logros Dinámicos (Achievements Engine)**:
+  - Definición modular en objetos JSON/TS con funciones evaluadoras puras (`id`, `title`, `description`, `icon`, `criteriaFn`).
   - *Primer Paso al Título*: Aprobar la primera materia regular.
   - *Mente Calibrada*: Superar las 3 pruebas de diagnóstico nivelatorio (0 créditos).
   - *Lobo de Wall Street*: Completar el área de Finanzas.
@@ -79,9 +85,19 @@ La malla curricular funciona visual y conceptualmente como un **Árbol de Talent
   - *Políglota Institucional*: Completar los niveles de Lengua Extranjera.
   - *Superviviente de Semestre*: Completar el 100% de un período.
   - *Especialista Consagrado*: Aprobar el bloque de Profundización (8 créditos).
-  - *Jefe Final Derrotado*: Completar Opción de Grado y el 100% del plan.
-- **Desacoplamiento Arquitectónico**:
-  - `gamificationEngine.js` opera de manera modular e independiente de la UI y del motor curricular, facilitando activar/desactivar la gamificación o modificar los criterios de logros sin alterar la base de datos.
+  - *Jefe Final Derrotado*: Completar Opción de Grado y el 100% del plan (158 créditos).
+- **Desacoplamiento Arquitectónico & Estructura de Proyecto (`src/`)**:
+  - `gamificationEngine.ts` opera de manera modular e independiente de la UI y del motor curricular.
+  - Estructura de carpetas acordada:
+    ```text
+    src/
+    ├── components/    # Componentes UI reutilizables (CourseCard, Header, BottomNav, Drawer)
+    ├── pages/         # Las 4 vistas (Malla, Logros, Analítica, Configuración)
+    ├── hooks/         # Custom React Hooks (useCurriculum, useProgress, useGamification)
+    ├── lib/           # Lógica pura (curriculumEngine.ts, gamificationEngine.ts, db.ts Dexie)
+    ├── types/         # Definiciones TypeScript / Zod Schemas
+    └── styles/        # index.css + Tokens (Modo Claro oficial + Modo Oscuro opcional)
+    ```
 
 ### Fases de Desarrollo Paso a Paso
 1. **Fase 1: Configuración Inicial del Proyecto (PWA App)**
