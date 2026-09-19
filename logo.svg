@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background circle with warm ivory tone -->
+  <rect width="512" height="512" rx="128" fill="#F8F7F4"/>
+  
+  <!-- Outer subtle aura ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#D9D3C7" stroke-width="6" stroke-dasharray="12 12"/>
+  
+  <!-- Connection lines (Skill Tree DAG Graph) -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Level 1 Connections -->
+    <path d="M 140 256 L 230 170" stroke="#7A98BF" stroke-width="8"/>
+    <path d="M 140 256 L 230 342" stroke="#7A98BF" stroke-width="8"/>
+    
+    <!-- Level 2 Connections -->
+    <path d="M 230 170 L 340 170" stroke="#73482F" stroke-width="10"/>
+    <path d="M 230 342 L 340 342" stroke="#6D86A6" stroke-width="8"/>
+    <path d="M 230 170 L 340 256" stroke="#7A98BF" stroke-width="8"/>
+    <path d="M 230 342 L 340 256" stroke="#73482F" stroke-width="10"/>
+    
+    <!-- Final Pinnacle Connections -->
+    <path d="M 340 170 L 410 256" stroke="#73482F" stroke-width="10"/>
+    <path d="M 340 256 L 410 256" stroke="#73482F" stroke-width="12"/>
+    <path d="M 340 342 L 410 256" stroke="#73482F" stroke-width="10"/>
+  </g>
+  
+  <!-- Graph Nodes (Skill Tree Milestones) -->
+  <!-- Root Node 1 -->
+  <circle cx="140" cy="256" r="28" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
+  <circle cx="140" cy="256" r="12" fill="#7A98BF"/>
+  
+  <!-- Branch Node 2A -->
+  <circle cx="230" cy="170" r="26" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
+  <circle cx="230" cy="170" r="11" fill="#73482F"/>
+  
+  <!-- Branch Node 2B -->
+  <circle cx="230" cy="342" r="26" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
+  <circle cx="230" cy="342" r="11" fill="#7A98BF"/>
+  
+  <!-- Master Node 3A -->
+  <circle cx="340" cy="170" r="26" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
+  <circle cx="340" cy="170" r="11" fill="#73482F"/>
+  
+  <!-- Master Node 3B -->
+  <circle cx="340" cy="256" r="30" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
+  <circle cx="340" cy="256" r="14" fill="#73482F"/>
+  
+  <!-- Master Node 3C -->
+  <circle cx="340" cy="342" r="26" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
+  <circle cx="340" cy="342" r="11" fill="#6D86A6"/>
+  
+  <!-- Pinnacle Capstone Trophy Node (Graduation) -->
+  <circle cx="410" cy="256" r="36" fill="#73482F" stroke="#FFFFFF" stroke-width="8"/>
+  <!-- Star icon inside Pinnacle Node -->
+  <polygon points="410,234 416,248 431,250 420,261 423,276 410,268 397,276 400,261 389,250 404,248" fill="#FFFFFF"/>
+</svg>
