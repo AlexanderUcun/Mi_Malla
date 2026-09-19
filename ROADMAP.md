@@ -171,4 +171,19 @@ Conectar el sistema de recompensas con dosificación elegante (cero ruidos ni in
 ### Entregable Tangible
 Producto final completo, pulido, 100% funcional sin conexión a internet y listo para su uso diario por estudiantes universitarios.
 
+---
+
+## 🛡️ Matriz de Blindaje Técnico y Prevención de Fallas Tecnológicas
+
+| Componente | Falla Potencial Detectada | Salvaguarda Técnica Implementada |
+|---|---|---|
+| **PWA & Viewport** | Barra de gestos de iPhone tapando el Bottom Nav | `<meta name="viewport" content="... viewport-fit=cover">` + `env(safe-area-inset-bottom)` |
+| **Persistencia Dexie.js** | Saltos visuales por lectura asíncrona (*Hydration Race Condition*) | Estado `isHydrating: boolean` + *Skeleton Screen* inicial |
+| **Grafo Curricular (DAG)** | Rollback incompleto al desmarcar antecedente | Algoritmo BFS/DFS de profundidad completa desmarcando toda la cadena descendiente |
+| **Motor de Gamificación** | Deriva de puntos por contadores mutables (+100/-100) | XP calculada como **función pura**: `XP = sum(créditos completados) * 100` |
+| **Modo Simulación** | Contaminación o autoguardado accidental en IndexedDB | Clon de estado desacoplado en RAM; escrituras a `db.put()` bloqueadas en simulación |
+| **Importación Backup** | Corrupción de DB por JSON malformado o alterado | Validación runtime previa con esquema **Zod** (`ZUserProgressImport.parse(json)`) |
+| **Analítica (Recharts)** | Error de renderizado `width: 0 / height: 0` por contenedor oculto | Renderizado condicional exclusivo cuando la pestaña activa es `analytics` |
+| **Ficha Compartible** | Renderizado deforme en Canvas por fuentes no cargadas | Verificación de promesa `document.fonts.ready` antes del dibujo en Canvas |
+
 

@@ -214,6 +214,23 @@ Para evitar errores comunes, frustración del estudiante y garantizar una experi
 7. **Persistencia Robusta contra Purgas de iOS**:
    - Almacenamiento primario en **`IndexedDB`** (más resistente a purgas automáticas de Safari WebKit que `localStorage`) con exportación periódica en un clic.
 
+### Blindaje Técnico y Prevención de Fallas Tecnológicas
+Para garantizar estabilidad absoluta, cero fallas en producción y cero pérdida de datos:
+1. **Prevención de Saltos de Pantalla por Lectura Asíncrona (Hydration Flag)**:
+   - Estado `isHydrating: boolean` en el Contexto de React mientras Dexie.js hidrata IndexedDB, mostrando un *Skeleton Screen* limpio para evitar destellos visuales (*race conditions*).
+2. **Deshacer en Cascada Recursivo por Grafo (BFS/DFS Traversal)**:
+   - Al desmarcar una materia antecedente, el motor recorre recursivamente todo el Grafo Dirigido Acíclico (DAG), re-bloqueando y revirtiendo el estado de todas las materias descendientes en la cadena.
+3. **Cálculo Determinista y Puro de XP**:
+   - La experiencia (XP) **nunca** es un contador mutable (+100/-100), sino una función pura calculada reactivamente: `XP = sum(créditos de materias 'completed') * 100`. Cero deriva de puntos.
+4. **Aislamiento Absoluto del Modo Simulación ("What-If")**:
+   - Los datos simulados viven únicamente en un clon de estado en RAM. Toda escritura a IndexedDB (`db.put`) y la exportación de JSON permanecen desactivadas explícitamente mientras dure la simulación.
+5. **Validación Runtime de Archivos Importados con Zod**:
+   - Al usar "Importar Progreso", la carga de cualquier JSON pasa primero por `ZUserProgressImport.parse(json)`. Si el archivo está malformado o alterado, se rechaza de inmediato sin corromper IndexedDB.
+6. **Contención de Errores de Renderizado en Recharts**:
+   - El contenedor del gráfico tipo Radar se renderiza únicamente cuando la Pantalla 3 (`activeTab === 'analytics'`) está montada, evitando errores de dimensión `width: 0 / height: 0`.
+7. **Exportación Segura de Ficha Compartible**:
+   - Verificación de la promesa `document.fonts.ready` antes de renderizar la tarjeta en el Canvas para evitar textos desalineados en las imágenes descargables.
+
 ### Protocolo de Trabajo con el Asistente
 - **Aprobación previa obligatoria**: No realizar modificaciones ni creaciones de código o archivos del proyecto sin presentar primero el plan y recibir la aprobación explícita del usuario.
 
