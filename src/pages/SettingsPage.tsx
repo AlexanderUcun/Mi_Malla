@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react'
-import { Download, Upload, FlaskConical, Moon, Sun } from 'lucide-react'
+import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { exportProgressJSON, bulkSaveCourseStatuses } from '../lib/db'
 import { ZUserProgressImport, type UserCourseRecord } from '../types/curriculum'
+import { ShareCardModal } from '../components/ShareCardModal'
 
 export const SettingsPage: React.FC = () => {
   const {
@@ -10,12 +11,15 @@ export const SettingsPage: React.FC = () => {
     toggleTheme,
     isSimulationMode,
     toggleSimulationMode,
-    resetProgress
+    resetProgress,
+    levelInfo,
+    metrics
   } = useCurriculum()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [importStatus, setImportStatus] = useState<string | null>(null)
   const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false)
+  const [showShareModal, setShowShareModal] = useState<boolean>(false)
 
   const handleExportJSON = async () => {
     try {
@@ -65,7 +69,42 @@ export const SettingsPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Modo Simulación */}
+      {/* Ficha de Personaje Compartible */}
+      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-md)', backgroundColor: '#FDF0EC', border: '1px solid var(--color-terracotta)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Sparkles size={20} color="var(--color-terracotta)" />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Ficha de Avance Compartible</h3>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Genera tu tarjeta de personaje RPG con tu nivel ({levelInfo.title}) y porcentaje ({Math.round(metrics.completionPercentage)}%).
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowShareModal(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-full)',
+            border: 'none',
+            backgroundColor: 'var(--color-terracotta)',
+            color: '#FFFFFF',
+            fontWeight: 700,
+            fontSize: '12px',
+            cursor: 'pointer'
+          }}
+        >
+          <Share2 size={16} />
+          Ver Ficha
+        </button>
+      </div>
+
+      <ShareCardModal isOpen={showShareModal} onClose={() => setShowShareModal(false)} />
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
