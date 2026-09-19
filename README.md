@@ -9,12 +9,18 @@
 </p>
 
 <p align="center">
+  <a href="https://alexanderucun.github.io/Mi_Malla/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_Demo_en_Vivo-GitHub_Pages-73482F?style=for-the-badge&logo=github" alt="Demo en Vivo"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://alexanderucun.github.io/Mi_Malla/">🚀 <strong>Ver Aplicación en Vivo en GitHub Pages</strong></a> •
   <a href="#-características-principales">Características</a> •
   <a href="#-paleta-de-colores-oficial">Diseño & Paleta</a> •
   <a href="#-arquitectura-multi-pantalla">Vistas</a> •
   <a href="#-gamificación--skill-tree">Gamificación</a> •
   <a href="#-tecnologías">Tecnologías</a> •
-  <a href="#-instalación-y-desarrollo">Desarrollo</a> •
   <a href="ROADMAP.md">Roadmap</a>
 </p>
 
