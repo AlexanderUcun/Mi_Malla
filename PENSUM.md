@@ -2,7 +2,7 @@
 
 **Programa:** Administración de Empresas  
 **Institución:** Universidad de Cundinamarca (Sede Chía)  
-**Modalidad:** Mixta | **Total Períodos:** 9 | **Total Créditos:** 160 | **Total Asignaturas:** 66  
+**Modalidad:** Mixta | **Total Períodos:** 9 | **Total Créditos:** 158 | **Total Asignaturas:** 66  
 
 ---
 
@@ -18,7 +18,7 @@
 │ • Finanzas (Mat. Financiera, Análisis, Admin. Financiera), Talento Humano, │
 │   Marketing, Estadística, Sistemas Productivos e Investigación.             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 🟣 CICLO 3: AVANZADO, ESTRATEGIA Y GRADO (Semestres 7 a 9 · 55 Créditos · 19 M)
+│ 🟣 CICLO 3: AVANZADO, ESTRATEGIA Y GRADO (Semestres 7 a 9 · 53 Créditos · 19 M)
 │ • Estrategia Gerencial, Finanzas Internacionales, Formulación de Proyectos,│
 │   Profundización (8 cr - Énfasis) y Opción de Grado (Capstone).             │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -172,13 +172,13 @@
 ├───────────────────────────────────┬──────────────┬──────────┤
 │ Categoría                         │ Asignaturas  │ Créditos │
 ├───────────────────────────────────┼──────────────┼──────────┤
-│ Tronco Disciplinar Obligatorio    │ 42 materias  │ 127 cr   │
-│ Formación General Institucional   │ 11 materias  │ 14 cr    │
+│ Tronco Disciplinar Obligatorio    │ 42 materias  │ 118 cr   │
+│ Formación General Institucional   │ 11 materias  │ 21 cr    │
 │ Cupos Electivos (I al V)          │ 5 materias   │ 10 cr    │
 │ Pruebas Diagnósticas              │ 6 pruebas    │ 0 cr     │
 │ Énfasis (Profundización)          │ 1 bloque     │ 8 cr     │
 │ Opción de Grado                   │ 1 asignatura │ 1 cr     │
 ├───────────────────────────────────┼──────────────┼──────────┤
-│ TOTAL GENERAL                     │ 66 registros │ 160 cr   │
+│ TOTAL GENERAL                     │ 66 registros │ 158 cr   │
 └───────────────────────────────────┴──────────────┴──────────┘
 ```
