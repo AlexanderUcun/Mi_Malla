@@ -72,78 +72,85 @@ Construir el núcleo lógico independiente de la interfaz de usuario, garantizan
    - Regla de conversión de XP: `1 Crédito Académico = 100 XP` (Profundización = 800 XP).
    - Escala de 10 Niveles de progreso (desde *Nivel 1: Recluta Universitario* hasta *Nivel 10: Administrador Legendario*).
    - Lógica de evaluación en tiempo real del catálogo de logros (Finanzas, Talento Humano, Diagnósticos, Semestres completos, etc.).
-4. **Persistencia Local-First (Write-Through)**:
-   - Guardado automático y asíncrono del estado del estudiante en `localStorage`.
-   - Cualquier cambio se refleja de inmediato en la RAM y se sincroniza en segundo plano sin congelar la interfaz.
+4. **Persistencia Local-First Robusta (Write-Through & IndexedDB)**:
+   - Almacenamiento primario en **`IndexedDB`** (resistente a las políticas de purga ITP de Safari/iOS) con fallback a `localStorage`.
+   - Sincronización asíncrona en segundo plano sin congelar la interfaz táctil.
 
 ### Entregable Tangible
-Suite lógica y pruebas unitarias/funcionales que validan el desbloqueo automático del grafo, cálculo de XP y detección de logros en tiempo récord.
+Suite lógica y pruebas unitarias/funcionales que validan el desbloqueo automático del grafo, rollback seguro, cálculo de XP y persistencia robusta.
 
 ---
 
 ## 🗺️ Fase 3: Grilla Curricular y Arquitectura Multi-pantalla (4 Vistas)
 
 ### Objetivo
-Desplegar la estructura visual completa de la aplicación, el sistema de navegación por vistas y la presentación del árbol de materias en los 9 períodos.
+Desplegar la estructura visual completa de la aplicación, el sistema de navegación por vistas y la presentación del árbol de materias en los 9 períodos con ergonomía móvil.
 
 ### Tareas Técnicas
 1. **Navegación Multi-pantalla y Ergonomía Móvil**:
    - Implementación de la **Barra de Navegación Inferior (Bottom Nav)** fija para móviles con íconos lineales claros y soporte de **Zona Segura (`padding-bottom: max(12px, env(safe-area-inset-bottom))`)** para iPhone y Android gestual.
    - Modo responsivo para escritorio: diseño panorámico dividido (*Master-Detail*) con la malla a la izquierda y el panel de análisis a la derecha.
 2. **Las 4 Pantallas Especializadas**:
-   - `🗺️ Pantalla 1: Malla Curricular (Skill Tree)`: grilla con scroll snap horizontal para los 9 períodos y píldoras superiores de salto rápido (`1` al `9`).
+   - `🗺️ Pantalla 1: Malla Curricular (Skill Tree)`: grilla con scroll snap horizontal para los 9 períodos, píldoras superiores de salto rápido (`1` al `9`) y botón de **Onboarding Rápido ("Completar Semestre")** en cabeceras de columnas para estudiantes avanzados.
    - `🏆 Pantalla 2: Vitrina de Logros y Rangos (Trophies)`: escaparate de medallas (bronce, plata, oro, platino, diamante) y rango académico actual.
    - `📊 Pantalla 3: Métricas y Radar de Habilidades (Analytics)`: panel de control con distribución de créditos por área temática y porcentaje global de grado.
    - `⚙️ Pantalla 4: Perfil, Simulación y Respaldo (Settings)`: herramientas de exportación/importación y opciones generales.
-3. **Componente de Materia (`CourseCard`)**:
-   - Metáfora visual de nodo RPG en Tema Claro:
+3. **Componente de Materia (`CourseCard`) y Contraste Solar**:
+   - Metáfora visual de nodo RPG en Tema Claro con títulos en `--text-primary: #232B38` (`font-weight: 600`) para legibilidad óptima bajo la luz del sol (WCAG AAA):
      - *Bloqueada*: Fondo `#EFECE6`, borde tenue `#A4ADBF`, candado discreto.
      - *Desbloqueada*: Fondo `#FFFFFF`, borde definido, lista para cursar.
      - *En Curso*: Borde y acento en Azul Acero (`#7A98BF`).
      - *Aprobada*: Borde y detalles en Terracota (`#73482F`) con check de maestría.
+     - *Por Nivelar*: Badge amigable para materias reprobadas (`failed`).
    - Badges visuales por `category` y área académica (`learning_field`).
 4. **Header Superior con Barra de XP**:
    - Barra de nivel del estudiante con barra de progreso fluida en color Terracota.
 
 ### Entregable Tangible
-Navegación completa entre las 4 vistas y visualización interactiva de los 9 semestres del programa de Administración de Empresas.
+Navegación fluida entre las 4 vistas, soporte solar de alto contraste y grilla interactiva con opción de onboarding rápido por semestre.
 
 ---
 
 ## ⚡ Fase 4: Interactividad Avanzada, Resaltado de Red y UX Táctil
 
 ### Objetivo
-Dar vida a la aplicación con animaciones fluidas, enfoque táctil ergonómico para móviles y herramientas de inspección y simulación.
+Dar vida a la aplicación con animaciones fluidas, enfoque táctil ergonómico para móviles, protección contra toques accidentales y herramientas de inspección.
 
 ### Tareas Técnicas
-1. **Resaltado en Cadena (*Chain Glow*)**:
-   - Al tocar o pasar el cursor sobre cualquier materia, se iluminan con resplandor en tonos arena/terracota todas sus materias predecesoras (prerrequisitos) y sucesoras (materias que desbloquea a futuro).
-2. **Acción Rápida de Estado**:
-   - Micro-interacción táctil para conmutar el estado de la materia (`completed`, `in_progress`, `pending`, `failed`) con micro-animaciones en `framer-motion`.
-3. **Drawer / Inspector Lateral de Asignatura**:
+1. **Prevención de Toques Accidentales (*Scroll Guard*)**:
+   - Umbral de movimiento táctil (*scroll threshold*) de `8px` para evitar que un deslizamiento de scroll se confunda con un tap de marcado.
+2. **Resaltado Direccional en Cadena (*Chain Glow*)**:
+   - Diferenciación visual clara:
+     - **Hacia atrás (Requisitos previos requeridos)**: Iluminadas en tono **Arena (`#D9D3C7`)** con indicador `← Requisito`.
+     - **Hacia adelante (Materias que desbloquea)**: Iluminadas en **Terracota (`#73482F`)** con pulso suave `→ Desbloquea`.
+   - Tocar cualquier espacio neutro desactiva de inmediato el resplandor.
+3. **Acción Rápida de Estado & Notificación de Deshacer (*Undo*)**:
+   - Botón de acción explícito en la tarjeta para alternar estado (`completed`, `in_progress`, `pending`, `failed`) con micro-animaciones en `framer-motion`.
+   - **Toast temporal de 5 segundos con botón "Deshacer" (Undo)** ante cualquier cambio accidental.
+   - Confirmación amigable si desmarcar una materia re-bloqueará materias posteriores en cascada.
+4. **Drawer / Inspector Lateral de Asignatura**:
    - Panel lateral deslizante con el desglose completo de la materia: código, créditos, horas (HT/HP/HTP), prerrequisitos y nota referencial.
    - **Personalización de Electivas**: campo de texto para que el estudiante ingrese el nombre real de la electiva cursada (ej. *"Comercio Electrónico"*).
-4. **Modo Simulación ("What-If")**:
+5. **Modo Simulación ("What-If")**:
    - Interruptor para activar un entorno de pruebas (*sandbox*): permite marcar materias ficticiamente para ver qué se desbloquearía en los semestres siguientes sin tocar el avance real guardado.
 
 ### Entregable Tangible
-Malla interactiva con respuesta táctil inmediata, iluminación de caminos curriculares, inspector detallado y simulador de escenarios futuros.
+Malla interactiva blindada contra toques accidentales, iluminación direccional intuitiva, sistema de deshacer en 5 segundos y simulador de escenarios.
 
 ---
 
 ## 🏆 Fase 5: Gamificación Completa, Métricas, Backup y PWA Offline
 
 ### Objetivo
-Conectar el sistema de recompensas, afinar las métricas analíticas, asegurar la portabilidad de los datos y certificar el funcionamiento offline de la PWA.
+Conectar el sistema de recompensas con dosificación elegante (cero ruidos ni interrupciones), asegurar la portabilidad de los datos y certificar el funcionamiento offline de la PWA.
 
 ### Tareas Técnicas
 1. **Dashboard y Gráfico Radar**:
    - Implementación de gráfico de **Radar / Tela de araña** mostrando el balance de competencias por área temática (Finanzas, Talento Humano, Mercadeo, Métodos Cuantitativos, etc.).
    - Estadísticas de créditos aprobados vs. pendientes y porcentaje hacia el grado.
-2. **Vitrina de Logros Activa & Recompensas**:
-   - Alertas flotantes animadas tipo videojuego al desbloquear un logro o subir de nivel.
-   - Lluvia de confetti personalizada con `canvas-confetti` (partículas en arena, terracota y acero) al completar un semestre o graduarse.
-   - Micro-vibración háptica (`navigator.vibrate([15])`) en smartphones compatibles.
+2. **Vitrina de Logros & Celebración Dosificada (No Ruido / No Spam)**:
+   - Aprobaciones individuales: micro-animación en barra de XP y vibración háptica suave (`15ms`).
+   - Lluvia de confetti (`canvas-confetti`) y modales celebratorios reservados **exclusivamente para hitos mayores** (semestres completos, culminación de áreas temáticas o graduación). Sonidos silenciados por defecto para bibliotecas y aulas.
 3. **Ficha de Avance / Modo Compartir**:
    - Generación estética de la **"Ficha de Estudiante / Tarjeta de Personaje"** con nivel RPG, porcentaje de avance y gráfico de radar, lista para descargar o compartir en redes sociales.
 4. **Copia de Seguridad y Portabilidad (100% Offline)**:
@@ -156,4 +163,5 @@ Conectar el sistema de recompensas, afinar las métricas analíticas, asegurar l
 
 ### Entregable Tangible
 Producto final completo, pulido, 100% funcional sin conexión a internet y listo para su uso diario por estudiantes universitarios.
+
 

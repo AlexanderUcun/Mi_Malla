@@ -178,12 +178,33 @@ Para evitar la sobrecarga visual y brindar una experiencia nativa fluida, la apl
 - **Zona Segura en Pantallas Móviles (*Safe Area Insets*)**: La barra de navegación inferior (Bottom Nav) respeta `padding-bottom: max(12px, env(safe-area-inset-bottom))` para garantizar comodidad táctil sin colisionar con el indicador de inicio de iOS o las barras de gestos de Android.
 - **Ficha de Avance Compartible**: Tarjeta visual de personaje descargable o compartible en la pantalla de perfil, mostrando el nivel RPG alcanzado, porcentaje de grado y gráfico de radar.
 
+### Blindaje de Interacción y Prevención de Fricción UX
+Para evitar errores comunes, frustración del estudiante y garantizar una experiencia de uso fluida:
+1. **Prevención de Toques Accidentales en Scroll**:
+   - Umbral de movimiento táctil (*scroll threshold*) de `8px` para evitar que un desplazamiento con el pulgar se confunda con un toque de marcado.
+   - El cambio de estado de materia se realiza mediante un botón de acción rápida explícito con icono (o dentro del Drawer), evitando toques involuntarios en la tarjeta.
+2. **Onboarding Rápido (Completar Semestre en 1 Toque)**:
+   - Botón discreto en la cabecera de cada columna del semestre (*"Completar Semestre"*, con confirmación) para que un estudiante avanzado configure su avance de 1º a 5º semestre en segundos.
+3. **Resaltado Direccional en *Chain Glow***:
+   - Diferenciación visual de dependencias: prerrequisitos previos requeridos iluminados en tono **Arena (`#D9D3C7`)** con flecha hacia atrás `←`, y materias que desbloquea a futuro iluminadas en **Terracota (`#73482F`)** con pulso hacia adelante `→`. Tocar un espacio neutro desactiva el resplandor de inmediato.
+4. **Dosificación de Gamificación (Cero Ruidos ni Interrupciones)**:
+   - Micro-animación en la barra de XP y vibración háptica suave (`15ms`) para aprobaciones individuales.
+   - Lluvia de confetti (`canvas-confetti`) y modales celebratorios reservados **únicamente para hitos legendarios** (semestres completos, culminación de áreas temáticas o graduación). Sonidos silenciados por defecto.
+5. **Máxima Legibilidad Exterior (WCAG AAA)**:
+   - Títulos y créditos renderizados en `--text-primary: #232B38` con `font-weight: 600` para garantizar lectura nítida bajo el sol del campus universitario.
+6. **Seguridad con Notificación de Deshacer (*Undo Action*)**:
+   - Toast temporal de 5 segundos con botón *"Deshacer"* tras alternar un estado.
+   - Alerta amigable de confirmación si desmarcar una materia re-bloqueará materias posteriores en cascada.
+7. **Persistencia Robusta contra Purgas de iOS**:
+   - Almacenamiento primario en **`IndexedDB`** (más resistente a purgas automáticas de Safari WebKit que `localStorage`) con exportación periódica en un clic.
+
 ### Protocolo de Trabajo con el Asistente
 - **Aprobación previa obligatoria**: No realizar modificaciones ni creaciones de código o archivos del proyecto sin presentar primero el plan y recibir la aprobación explícita del usuario.
 
 ## Lo que queda fuera del alcance por ahora (Non-goals)
 - No es necesario modelar escalas de calificación, GPA o certificados académicos con precisión matemática estricta; la columna `grade` es un número decimal de referencia no validado obligatoriamente.
 - No es necesario gestionar horarios semanales ni cruce de clases; esta herramienta es un rastreador de *avance curricular*, no un gestor de horarios ni de registro de asignaturas.
+
 
 
 
