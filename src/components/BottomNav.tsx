@@ -1,5 +1,5 @@
 import React from 'react'
-import { Map, Trophy, BarChart3, Settings } from 'lucide-react'
+import { Home, Map, Trophy, BarChart3, Settings } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 
 export const BottomNav: React.FC = () => {
@@ -9,87 +9,126 @@ export const BottomNav: React.FC = () => {
     <nav
       className="glass-panel"
       style={{
-        position: 'sticky',
+        position: 'fixed',
         bottom: 0,
-        zIndex: 40,
-        padding: '10px 16px',
-        paddingBottom: 'var(--safe-bottom)',
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        paddingTop: '10px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        paddingBottom: 'max(14px, env(safe-area-inset-bottom, 14px))',
         display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTop: '1px solid var(--border-card)'
       }}
     >
-      <button
-        onClick={() => setActiveTab('malla')}
+      <div
         style={{
+          width: '100%',
+          maxWidth: '800px',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: activeTab === 'malla' ? 'var(--color-terracotta)' : 'var(--color-steel)',
-          fontWeight: activeTab === 'malla' ? 700 : 500
+          justifyContent: 'space-around',
+          alignItems: 'center'
         }}
       >
-        <Map size={20} />
-        <span style={{ fontSize: '11px' }}>Malla</span>
-      </button>
+        {/* Item 1: Presentación PWA / Inicio */}
+        <button
+          onClick={() => setActiveTab('about')}
+          title="Ver presentación completa de Mi Malla PWA"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'about' ? 'var(--color-terracotta)' : 'var(--color-steel)',
+            fontWeight: activeTab === 'about' ? 700 : 500
+          }}
+        >
+          <Home size={19} />
+          <span style={{ fontSize: '11px' }}>Inicio</span>
+        </button>
 
-      <button
-        onClick={() => setActiveTab('logros')}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: activeTab === 'logros' ? 'var(--color-terracotta)' : 'var(--color-steel)',
-          fontWeight: activeTab === 'logros' ? 700 : 500
-        }}
-      >
-        <Trophy size={20} />
-        <span style={{ fontSize: '11px' }}>Logros</span>
-      </button>
+        {/* Item 2: Malla */}
+        <button
+          onClick={() => setActiveTab('malla')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'malla' ? 'var(--color-terracotta)' : 'var(--color-steel)',
+            fontWeight: activeTab === 'malla' ? 700 : 500
+          }}
+        >
+          <Map size={19} />
+          <span style={{ fontSize: '11px' }}>Malla</span>
+        </button>
 
-      <button
-        onClick={() => setActiveTab('analytics')}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: activeTab === 'analytics' ? 'var(--color-terracotta)' : 'var(--color-steel)',
-          fontWeight: activeTab === 'analytics' ? 700 : 500
-        }}
-      >
-        <BarChart3 size={20} />
-        <span style={{ fontSize: '11px' }}>Métricas</span>
-      </button>
+        {/* Item 3: Logros */}
+        <button
+          onClick={() => setActiveTab('logros')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'logros' ? 'var(--color-terracotta)' : 'var(--color-steel)',
+            fontWeight: activeTab === 'logros' ? 700 : 500
+          }}
+        >
+          <Trophy size={19} />
+          <span style={{ fontSize: '11px' }}>Logros</span>
+        </button>
 
-      <button
-        onClick={() => setActiveTab('settings')}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: activeTab === 'settings' ? 'var(--color-terracotta)' : 'var(--color-steel)',
-          fontWeight: activeTab === 'settings' ? 700 : 500
-        }}
-      >
-        <Settings size={20} />
-        <span style={{ fontSize: '11px' }}>Ajustes</span>
-      </button>
+        {/* Item 4: Métricas */}
+        <button
+          onClick={() => setActiveTab('analytics')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'analytics' ? 'var(--color-terracotta)' : 'var(--color-steel)',
+            fontWeight: activeTab === 'analytics' ? 700 : 500
+          }}
+        >
+          <BarChart3 size={19} />
+          <span style={{ fontSize: '11px' }}>Métricas</span>
+        </button>
+
+        {/* Item 5: Ajustes */}
+        <button
+          onClick={() => setActiveTab('settings')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'settings' ? 'var(--color-terracotta)' : 'var(--color-steel)',
+            fontWeight: activeTab === 'settings' ? 700 : 500
+          }}
+        >
+          <Settings size={19} />
+          <span style={{ fontSize: '11px' }}>Ajustes</span>
+        </button>
+      </div>
     </nav>
   )
 }

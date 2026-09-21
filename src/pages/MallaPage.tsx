@@ -1,5 +1,5 @@
 import React from 'react'
-import { CheckCheck, RotateCcw } from 'lucide-react'
+import { CheckCheck, RotateCcw, FlaskConical } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { CourseCard } from '../components/CourseCard'
 
@@ -11,7 +11,9 @@ export const MallaPage: React.FC = () => {
     completeSemester,
     undoState,
     undoLastAction,
-    clearUndo
+    clearUndo,
+    isSimulationMode,
+    toggleSimulationMode
   } = useCurriculum()
 
   // Zoom Level State (range 0.6x to 1.25x)
@@ -33,13 +35,55 @@ export const MallaPage: React.FC = () => {
   // Group courses by period 1..9
   const periods = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-  const getCoursesForPeriod = (p: number) => courses.filter(c => c.period === p)
+  const getCoursesForPeriod = (p: number) =>
+    courses
+      .filter(c => c.period === p)
+      .sort((a, b) => {
+        if (a.is_diagnostic === b.is_diagnostic) return 0
+        return a.is_diagnostic ? 1 : -1
+      })
+
+  const isPillClickRef = React.useRef(false)
 
   const handlePeriodPillClick = (periodNum: number) => {
     setSelectedPeriod(periodNum)
+    isPillClickRef.current = true
+    const container = containerRef.current
     const el = document.getElementById(`period-col-${periodNum}`)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    if (container && el) {
+      const targetLeft = el.offsetLeft - container.offsetLeft
+      container.scrollTo({ left: targetLeft, behavior: 'smooth' })
+      setTimeout(() => {
+        isPillClickRef.current = false
+      }, 500)
+    }
+  }
+
+  const handleScroll = () => {
+    if (isPillClickRef.current) return
+    const container = containerRef.current
+    if (!container) return
+
+    const scrollLeft = container.scrollLeft
+    const containerLeft = container.offsetLeft
+
+    let closestPeriod = 1
+    let minDistance = Infinity
+
+    for (const p of periods) {
+      const el = document.getElementById(`period-col-${p}`)
+      if (el) {
+        const elLeft = el.offsetLeft - containerLeft
+        const dist = Math.abs(elLeft - scrollLeft)
+        if (dist < minDistance) {
+          minDistance = dist
+          closestPeriod = p
+        }
+      }
+    }
+
+    if (closestPeriod !== selectedPeriod) {
+      setSelectedPeriod(closestPeriod)
     }
   }
 
@@ -152,6 +196,44 @@ export const MallaPage: React.FC = () => {
         </div>
       )}
 
+      {/* Simulation Banner (only if active) */}
+      {isSimulationMode && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: '#FEF3C7',
+            border: '1px solid #F59E0B',
+            borderRadius: 'var(--radius-md)',
+            padding: '8px 14px',
+            fontSize: '12px',
+            color: '#92400E',
+            fontWeight: 600
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FlaskConical size={16} color="#D97706" />
+            <span>Modo Simulación Activo ("What-If") — Los cambios no afectan tus datos reales</span>
+          </div>
+          <button
+            onClick={toggleSimulationMode}
+            style={{
+              padding: '3px 8px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: '#D97706',
+              color: '#FFFFFF',
+              fontWeight: 700,
+              fontSize: '11px',
+              cursor: 'pointer'
+            }}
+          >
+            Salir
+          </button>
+        </div>
+      )}
+
       {/* Selector Rápido de Semestre (Pills 1 al 9) */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
         <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', whiteSpace: 'nowrap', marginRight: '4px' }}>
@@ -182,6 +264,7 @@ export const MallaPage: React.FC = () => {
       {/* Grilla Curricular de 9 Semestres con Soporte de Zoom por Gestos (2 dedos / Ctrl+Wheel) */}
       <div
         ref={containerRef}
+        onScroll={handleScroll}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         style={{

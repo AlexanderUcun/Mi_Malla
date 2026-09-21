@@ -110,18 +110,23 @@ export const CourseDrawer: React.FC = () => {
             </div>
 
             {/* Course Details Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '20px' }}>
               <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
                 <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block' }}>Créditos</span>
                 <strong style={{ fontSize: '16px', color: 'var(--text-primary)' }}>{course.credits}</strong>
               </div>
               <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
-                <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block' }}>Horas Teóricas</span>
-                <strong style={{ fontSize: '16px', color: 'var(--text-primary)' }}>{course.ht}h</strong>
-              </div>
-              <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
                 <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block' }}>Categoría</span>
-                <strong style={{ fontSize: '12px', color: 'var(--text-terracotta)', textTransform: 'capitalize' }}>{course.category}</strong>
+                <strong style={{ fontSize: '12px', color: 'var(--text-terracotta)' }}>
+                  {{
+                    core: 'Disciplinar',
+                    diagnostic: 'Diagnóstico',
+                    general_education: 'Formación General',
+                    elective: 'Electiva',
+                    specialization: 'Profundización',
+                    capstone: 'Opción de Grado'
+                  }[course.category] ?? course.category}
+                </strong>
               </div>
             </div>
 

@@ -35,8 +35,8 @@ interface CurriculumContextType {
   gradesMap: Map<string, number>
   selectedPeriod: number
   setSelectedPeriod: (period: number) => void
-  activeTab: 'malla' | 'logros' | 'analytics' | 'settings'
-  setActiveTab: (tab: 'malla' | 'logros' | 'analytics' | 'settings') => void
+  activeTab: 'malla' | 'logros' | 'analytics' | 'settings' | 'about'
+  setActiveTab: (tab: 'malla' | 'logros' | 'analytics' | 'settings' | 'about') => void
   theme: 'light' | 'dark'
   toggleTheme: () => void
   inspectedCourseCode: string | null
@@ -75,7 +75,7 @@ const CurriculumContext = createContext<CurriculumContextType | null>(null)
 
 export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<number>(1)
-  const [activeTab, setActiveTab] = useState<'malla' | 'logros' | 'analytics' | 'settings'>('malla')
+  const [activeTab, setActiveTab] = useState<'malla' | 'logros' | 'analytics' | 'settings' | 'about'>('malla')
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [inspectedCourseCode, setInspectedCourseCode] = useState<string | null>(null)
   const [focusedCourseCode, setFocusedCourseCode] = useState<string | null>(null)

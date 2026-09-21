@@ -159,3 +159,20 @@ h1, h2, h3, h4, h5, h6 {
   outline: 2px solid var(--color-terracotta);
   outline-offset: 2px;
 }
+
+/* Recharts & SVG Focus / Touch Highlight Reset */
+.recharts-wrapper,
+.recharts-surface,
+.recharts-responsive-container,
+.recharts-wrapper *:focus,
+.recharts-surface *:focus,
+.recharts-wrapper *:focus-visible,
+.recharts-surface *:focus-visible,
+.recharts-polar-grid,
+.recharts-polar-angle-axis,
+.recharts-radar {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+

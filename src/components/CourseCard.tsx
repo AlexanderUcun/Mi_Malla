@@ -293,7 +293,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           {customName && <Edit3 size={12} color="var(--color-steel)" />}
         </h3>
         <p style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-          {course.code} {course.ht > 0 ? `· HT: ${course.ht}h` : ''}
+          {course.code}
         </p>
       </div>
 

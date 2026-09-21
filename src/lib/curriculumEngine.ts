@@ -31,6 +31,14 @@ for (const course of validatedSeed.courses) {
   prereqMap.set(course.code, course.prereqs || [])
 }
 
+// Ensure diagnostic courses are sorted at the end of each period list
+for (const list of periodMap.values()) {
+  list.sort((a, b) => {
+    if (a.is_diagnostic === b.is_diagnostic) return 0
+    return a.is_diagnostic ? 1 : -1
+  })
+}
+
 // Build reverse unlock graph (unlocksMap)
 for (const course of validatedSeed.courses) {
   for (const prereqCode of course.prereqs) {

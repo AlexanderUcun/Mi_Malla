@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   getCurriculumSeed,
   getAllCourses,
+  getCoursesByPeriod,
   calculateCourseState,
   getAffectedDownstreamCourses,
   calculateCurriculumMetrics
@@ -92,5 +93,21 @@ describe('Curriculum Engine & DAG Verification', () => {
     expect(metrics.completedCredits).toBe(4)
     expect(metrics.totalCredits).toBe(158)
     expect(metrics.creditsByField['Contabilidad y Costos'].completed).toBe(4)
+  })
+
+  it('should order diagnostic courses at the end of each period list', () => {
+    const period1Courses = getCoursesByPeriod(1)
+    const diagCountP1 = period1Courses.filter(c => c.is_diagnostic).length
+    expect(diagCountP1).toBeGreaterThan(0)
+    
+    // Check that all diagnostic courses appear after non-diagnostic ones
+    let seenDiagnostic = false
+    for (const course of period1Courses) {
+      if (course.is_diagnostic) {
+        seenDiagnostic = true
+      } else {
+        expect(seenDiagnostic).toBe(false)
+      }
+    }
   })
 })

@@ -1,15 +1,22 @@
-import React from 'react'
-import { Trophy, Award, Lock, CheckCircle2 } from 'lucide-react'
+import React, { useState } from 'react'
+import { Trophy, Award, Lock, CheckCircle2, Info } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { ACHIEVEMENTS_CATALOG } from '../lib/gamificationEngine'
+import { AchievementDetailModal } from '../components/AchievementDetailModal'
 
 export const LogrosPage: React.FC = () => {
   const { levelInfo, unlockedAchievements, totalXP } = useCurriculum()
+  const [selectedAchievementId, setSelectedAchievementId] = useState<string | null>(null)
 
   const unlockedIds = new Set(unlockedAchievements.map(a => a.id))
 
   return (
     <div style={{ padding: '24px 20px', maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <AchievementDetailModal
+        achievementId={selectedAchievementId}
+        onClose={() => setSelectedAchievementId(null)}
+      />
+
       {/* Banner de Rango del Estudiante */}
       <div
         style={{
@@ -78,7 +85,7 @@ export const LogrosPage: React.FC = () => {
           <div>
             <h3 style={{ fontSize: '20px', fontWeight: 700 }}>Vitrina de Logros & Medallas</h3>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-              Desbloqueados: {unlockedAchievements.length} de {ACHIEVEMENTS_CATALOG.length}
+              Desbloqueados: {unlockedAchievements.length} de {ACHIEVEMENTS_CATALOG.length} · Haz clic en cualquier medalla para ver sus requisitos
             </p>
           </div>
         </div>
@@ -90,6 +97,8 @@ export const LogrosPage: React.FC = () => {
             return (
               <div
                 key={ach.id}
+                onClick={() => setSelectedAchievementId(ach.id)}
+                title="Haz clic para ver asignaturas y requisitos para este logro"
                 className="transition-all"
                 style={{
                   backgroundColor: isUnlocked ? 'var(--bg-card)' : 'var(--node-locked-bg)',
@@ -97,10 +106,12 @@ export const LogrosPage: React.FC = () => {
                   padding: '20px',
                   border: isUnlocked ? '2px solid var(--color-terracotta)' : '1px solid var(--border-card)',
                   boxShadow: isUnlocked ? 'var(--shadow-terracotta)' : 'none',
-                  opacity: isUnlocked ? 1 : 0.75,
+                  opacity: isUnlocked ? 1 : 0.85,
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '14px'
+                  gap: '14px',
+                  cursor: 'pointer',
+                  position: 'relative'
                 }}
               >
                 <div
@@ -128,7 +139,11 @@ export const LogrosPage: React.FC = () => {
                     <h4 style={{ fontSize: '15px', fontWeight: 700, color: isUnlocked ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
                       {ach.title}
                     </h4>
-                    {isUnlocked && <CheckCircle2 size={16} color="var(--color-terracotta)" />}
+                    {isUnlocked ? (
+                      <CheckCircle2 size={16} color="var(--color-terracotta)" />
+                    ) : (
+                      <Info size={15} color="var(--color-steel)" />
+                    )}
                   </div>
                   <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
                     {ach.description}

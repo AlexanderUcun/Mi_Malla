@@ -168,3 +168,87 @@ export function evaluateUnlockedAchievements(
 ): Achievement[] {
   return ACHIEVEMENTS_CATALOG.filter(ach => ach.criteriaFn(courses, userStatusMap))
 }
+
+export interface AchievementProgressDetail {
+  achievement: Achievement
+  isUnlocked: boolean
+  requiredCourses: { course: Course; isCompleted: boolean }[]
+  totalRequired: number
+  totalCompleted: number
+  percentage: number
+}
+
+export function getAchievementProgressDetail(
+  achievementId: string,
+  courses: Course[],
+  userStatusMap: Map<string, CourseStatusType>
+): AchievementProgressDetail | null {
+  const achievement = ACHIEVEMENTS_CATALOG.find(a => a.id === achievementId)
+  if (!achievement) return null
+
+  let requiredCourseObjects: Course[] = []
+
+  switch (achievementId) {
+    case 'PRIMER_PASO':
+      requiredCourseObjects = courses.filter(c => !c.is_diagnostic)
+      break
+    case 'MENTE_CALIBRADA':
+      requiredCourseObjects = courses.filter(c => c.is_diagnostic)
+      break
+    case 'LOBO_WALL_STREET':
+      requiredCourseObjects = courses.filter(c => c.learning_field === 'Finanzas')
+      break
+    case 'LIDER_EQUIPOS':
+      requiredCourseObjects = courses.filter(c => c.learning_field === 'Talento Humano')
+      break
+    case 'POLIGLOTA':
+      const langCodes = ['CAI1002020304', 'CAI1002020406', 'CAI1002020507', 'CAI1002020608']
+      requiredCourseObjects = courses.filter(c => langCodes.includes(c.code))
+      break
+    case 'SEM_1_MASTER':
+      requiredCourseObjects = courses.filter(c => c.period === 1)
+      break
+    case 'ESPECIALISTA':
+      requiredCourseObjects = courses.filter(c => c.code === 'CAD102020950C')
+      break
+    case 'JEFE_FINAL':
+      requiredCourseObjects = courses
+      break
+  }
+
+  const isUnlocked = achievement.criteriaFn(courses, userStatusMap)
+  
+  if (achievementId === 'PRIMER_PASO') {
+    const completedCount = requiredCourseObjects.filter(c => userStatusMap.get(c.code) === 'completed').length
+    const isDone = completedCount > 0
+    return {
+      achievement,
+      isUnlocked,
+      requiredCourses: requiredCourseObjects.slice(0, 4).map(c => ({
+        course: c,
+        isCompleted: userStatusMap.get(c.code) === 'completed'
+      })),
+      totalRequired: 1,
+      totalCompleted: isDone ? 1 : 0,
+      percentage: isDone ? 100 : 0
+    }
+  }
+
+  const requiredCourses = requiredCourseObjects.map(c => ({
+    course: c,
+    isCompleted: userStatusMap.get(c.code) === 'completed'
+  }))
+
+  const totalRequired = requiredCourses.length
+  const totalCompleted = requiredCourses.filter(r => r.isCompleted).length
+  const percentage = totalRequired > 0 ? Math.round((totalCompleted / totalRequired) * 100) : 0
+
+  return {
+    achievement,
+    isUnlocked,
+    requiredCourses,
+    totalRequired,
+    totalCompleted,
+    percentage
+  }
+}

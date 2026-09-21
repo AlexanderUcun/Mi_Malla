@@ -1,12 +1,12 @@
 import React from 'react'
 import { CurriculumProvider, useCurriculum } from './context/CurriculumContext'
-import { HeaderXP } from './components/HeaderXP'
 import { BottomNav } from './components/BottomNav'
 import { CourseDrawer } from './components/CourseDrawer'
 import { MallaPage } from './pages/MallaPage'
 import { LogrosPage } from './pages/LogrosPage'
 import { AnalyticsPage } from './pages/AnalyticsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { PWAPresentationPage } from './pages/PWAPresentationPage'
 
 const MainContent: React.FC = () => {
   const { activeTab, isHydrating } = useCurriculum()
@@ -37,11 +37,12 @@ const MainContent: React.FC = () => {
   }
 
   return (
-    <main style={{ flex: 1, paddingBottom: '24px' }}>
+    <main style={{ flex: 1, paddingBottom: '96px' }}>
       {activeTab === 'malla' && <MallaPage />}
       {activeTab === 'logros' && <LogrosPage />}
       {activeTab === 'analytics' && <AnalyticsPage />}
       {activeTab === 'settings' && <SettingsPage />}
+      {activeTab === 'about' && <PWAPresentationPage />}
     </main>
   )
 }
@@ -50,7 +51,6 @@ export function App() {
   return (
     <CurriculumProvider>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-main)' }}>
-        <HeaderXP />
         <MainContent />
         <BottomNav />
         <CourseDrawer />
