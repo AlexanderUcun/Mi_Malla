@@ -43,7 +43,7 @@ export const PWAPresentationPage: React.FC = () => {
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
-          background: 'linear-gradient(180deg, #FDF0EC 0%, #FFFFFF 100%)',
+          background: 'linear-gradient(180deg, var(--bg-card-hover) 0%, var(--bg-card) 100%)',
           position: 'relative',
           overflow: 'hidden'
         }}
@@ -64,12 +64,12 @@ export const PWAPresentationPage: React.FC = () => {
             width: '100px',
             height: '100px',
             borderRadius: '28px',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--bg-card)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             padding: '16px',
-            boxShadow: '0 12px 32px rgba(115, 72, 47, 0.18)',
+            boxShadow: 'var(--shadow-terracotta)',
             border: '3px solid var(--color-terracotta)',
             marginBottom: '20px'
           }}
@@ -116,22 +116,22 @@ export const PWAPresentationPage: React.FC = () => {
             marginTop: '28px'
           }}
         >
-          <div style={{ padding: '14px', backgroundColor: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
+          <div style={{ padding: '14px', backgroundColor: 'var(--bg-card-muted)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', fontWeight: 600 }}>Períodos Académicos</span>
             <strong style={{ fontSize: '20px', color: 'var(--text-primary)', fontWeight: 800 }}>9 Semestres</strong>
           </div>
 
-          <div style={{ padding: '14px', backgroundColor: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
+          <div style={{ padding: '14px', backgroundColor: 'var(--bg-card-muted)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', fontWeight: 600 }}>Créditos Académicos</span>
             <strong style={{ fontSize: '20px', color: 'var(--color-terracotta)', fontWeight: 800 }}>158 Créditos</strong>
           </div>
 
-          <div style={{ padding: '14px', backgroundColor: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
+          <div style={{ padding: '14px', backgroundColor: 'var(--bg-card-muted)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', fontWeight: 600 }}>Total Asignaturas</span>
             <strong style={{ fontSize: '20px', color: 'var(--text-primary)', fontWeight: 800 }}>66 Materias</strong>
           </div>
 
-          <div style={{ padding: '14px', backgroundColor: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
+          <div style={{ padding: '14px', backgroundColor: 'var(--bg-card-muted)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-card)' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', fontWeight: 600 }}>Modalidad & Sede</span>
             <strong style={{ fontSize: '20px', color: 'var(--color-steel)', fontWeight: 800 }}>Mixta · Chía</strong>
           </div>
@@ -159,11 +159,11 @@ export const PWAPresentationPage: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: '#FDF0EC', border: '1px solid var(--color-terracotta)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(115, 72, 47, 0.12)', border: '1px solid var(--color-terracotta)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ShieldCheck size={22} color="var(--color-terracotta)" />
               </div>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Persistencia 100% Offline & Local-First</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>Persistencia 100% Offline & Local-First</h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Privacidad absoluta sin registro ni servidores externos</span>
               </div>
             </div>
@@ -186,11 +186,11 @@ export const PWAPresentationPage: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: '#EFF6FF', border: '1px solid #3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Cpu size={22} color="#2563EB" />
+              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(122, 152, 191, 0.15)', border: '1px solid var(--color-slate-mid)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Cpu size={22} color="var(--color-slate-mid)" />
               </div>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Grafo Dirigido Acíclico (DAG)</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>Grafo Dirigido Acíclico (DAG)</h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Resplandor bidireccional (Chain Glow)</span>
               </div>
             </div>
@@ -213,11 +213,11 @@ export const PWAPresentationPage: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: '#FEF3C7', border: '1px solid #F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Award size={22} color="#D97706" />
+              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(115, 72, 47, 0.12)', border: '1px solid var(--color-terracotta)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Award size={22} color="var(--color-terracotta)" />
               </div>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Gamificación & Árbol de Talentos</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>Gamificación & Árbol de Talentos</h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Metáfora RPG con 10 Niveles Progresivos</span>
               </div>
             </div>
@@ -240,11 +240,11 @@ export const PWAPresentationPage: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-card)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card-muted)', border: '1px solid var(--border-card)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Database size={22} color="var(--color-steel)" />
               </div>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Respaldo y Portabilidad JSON</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>Respaldo y Portabilidad JSON</h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Transferencia rápida entre dispositivos</span>
               </div>
             </div>
@@ -281,3 +281,4 @@ export const PWAPresentationPage: React.FC = () => {
     </div>
   )
 }
+
