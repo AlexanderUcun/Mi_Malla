@@ -239,9 +239,36 @@ export const CourseDrawer: React.FC = () => {
                     {prereqs.map(p => {
                       const pDone = userStatusMap.get(p.code) === 'completed'
                       return (
-                        <div key={p.code} style={{ fontSize: '12px', padding: '6px 10px', borderRadius: 'var(--radius-sm)', backgroundColor: pDone ? '#F0FDF4' : '#FEF2F2', border: `1px solid ${pDone ? '#BBF7D0' : '#FECACA'}`, display: 'flex', justifyContent: 'space-between' }}>
-                          <span>{p.name} ({p.code})</span>
-                          <strong style={{ color: pDone ? '#166534' : '#991B1B' }}>{pDone ? '✓ Cumplido' : 'Pendiente'}</strong>
+                        <div
+                          key={p.code}
+                          style={{
+                            fontSize: '12px',
+                            padding: '8px 12px',
+                            borderRadius: 'var(--radius-sm)',
+                            backgroundColor: 'var(--bg-card-muted)',
+                            border: `1px solid ${pDone ? 'rgba(21, 128, 61, 0.4)' : 'rgba(185, 28, 28, 0.3)'}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '8px'
+                          }}
+                        >
+                          <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
+                            {p.name} ({p.code})
+                          </span>
+                          <span
+                            style={{
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: 'var(--radius-full)',
+                              backgroundColor: pDone ? 'rgba(21, 128, 61, 0.15)' : 'rgba(185, 28, 28, 0.15)',
+                              color: pDone ? '#16A34A' : '#EF4444',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            {pDone ? '✓ Cumplido' : 'Pendiente'}
+                          </span>
                         </div>
                       )
                     })}

@@ -59,7 +59,7 @@ export const AchievementDetailModal: React.FC<AchievementDetailModalProps> = ({ 
             <div
               style={{
                 padding: '24px 20px 18px',
-                backgroundColor: detail.isUnlocked ? '#FDF0EC' : 'var(--bg-main)',
+                backgroundColor: detail.isUnlocked ? 'var(--bg-card-hover)' : 'var(--bg-main)',
                 borderBottom: '1px solid var(--border-card)',
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -73,7 +73,7 @@ export const AchievementDetailModal: React.FC<AchievementDetailModalProps> = ({ 
                     width: '52px',
                     height: '52px',
                     borderRadius: 'var(--radius-md)',
-                    backgroundColor: detail.isUnlocked ? '#FFFFFF' : 'var(--bg-card)',
+                    backgroundColor: 'var(--bg-card)',
                     border: detail.isUnlocked ? '2px solid var(--color-terracotta)' : '1px solid var(--border-card)',
                     display: 'flex',
                     alignItems: 'center',
@@ -168,8 +168,8 @@ export const AchievementDetailModal: React.FC<AchievementDetailModalProps> = ({ 
                       style={{
                         padding: '10px 14px',
                         borderRadius: 'var(--radius-sm)',
-                        backgroundColor: isCompleted ? '#F0FDF4' : 'var(--bg-main)',
-                        border: `1px solid ${isCompleted ? '#BBF7D0' : 'var(--border-card)'}`,
+                        backgroundColor: isCompleted ? 'rgba(21, 128, 61, 0.12)' : 'var(--bg-main)',
+                        border: `1px solid ${isCompleted ? 'rgba(21, 128, 61, 0.35)' : 'var(--border-card)'}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -184,8 +184,8 @@ export const AchievementDetailModal: React.FC<AchievementDetailModalProps> = ({ 
                       </div>
 
                       {isCompleted ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#166534', fontWeight: 700, fontSize: '11px', whiteSpace: 'nowrap', marginLeft: '8px' }}>
-                          <CheckCircle2 size={15} color="#166534" />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontWeight: 700, fontSize: '11px', whiteSpace: 'nowrap', marginLeft: '8px' }}>
+                          <CheckCircle2 size={15} color="#16A34A" />
                           <span>Aprobada</span>
                         </div>
                       ) : (
