@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Trophy, Award, Lock, CheckCircle2, CircleDashed } from 'lucide-react'
+import { X, Trophy, Lock, CheckCircle2, CircleDashed } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { getAchievementProgressDetail } from '../lib/gamificationEngine'
 

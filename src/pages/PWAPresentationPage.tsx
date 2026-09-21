@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles, ShieldCheck, Cpu, Database, Award, ArrowLeft, CheckCircle2, Layers } from 'lucide-react'
+import { Sparkles, ShieldCheck, Cpu, Database, Award, ArrowLeft, Layers } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 
 export const PWAPresentationPage: React.FC = () => {
