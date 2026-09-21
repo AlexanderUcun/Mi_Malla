@@ -1,55 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <!-- Background circle with warm ivory tone -->
-  <rect width="512" height="512" rx="128" fill="#F8F7F4"/>
-  
-  <!-- Outer subtle aura ring -->
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#D9D3C7" stroke-width="6" stroke-dasharray="12 12"/>
-  
-  <!-- Connection lines (Skill Tree DAG Graph) -->
-  <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- Level 1 Connections -->
-    <path d="M 140 256 L 230 170" stroke="#7A98BF" stroke-width="8"/>
-    <path d="M 140 256 L 230 342" stroke="#7A98BF" stroke-width="8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 560" width="100%" height="100%">
+  <defs>
+    <!-- Soft depth shadow for nodes -->
+    <filter id="nodeShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-color="#232B38" flood-opacity="0.18" />
+    </filter>
     
-    <!-- Level 2 Connections -->
-    <path d="M 230 170 L 340 170" stroke="#73482F" stroke-width="10"/>
-    <path d="M 230 342 L 340 342" stroke="#6D86A6" stroke-width="8"/>
-    <path d="M 230 170 L 340 256" stroke="#7A98BF" stroke-width="8"/>
-    <path d="M 230 342 L 340 256" stroke="#73482F" stroke-width="10"/>
-    
-    <!-- Final Pinnacle Connections -->
-    <path d="M 340 170 L 410 256" stroke="#73482F" stroke-width="10"/>
-    <path d="M 340 256 L 410 256" stroke="#73482F" stroke-width="12"/>
-    <path d="M 340 342 L 410 256" stroke="#73482F" stroke-width="10"/>
+    <!-- Subtle shadow for text -->
+    <filter id="textShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#73482F" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Graphic Mark / Isotype (Skill Tree Nodes) -->
+  <g filter="url(#nodeShadow)">
+    <!-- Connecting diagonal line -->
+    <line x1="165" y1="215" x2="347" y2="71" stroke="#7A98BF" stroke-width="12" stroke-linecap="round" />
+
+    <!-- Node 1: Bottom-left open ring -->
+    <circle cx="165" cy="215" r="26" fill="#FFFFFF" stroke="#7A98BF" stroke-width="11" />
+
+    <!-- Node 2: Middle solid filled circle -->
+    <circle cx="256" cy="143" r="29" fill="#7A98BF" stroke="#FFFFFF" stroke-width="4" />
+
+    <!-- Node 3: Top-right rounded diamond (square rotated 45°) -->
+    <g transform="translate(347, 71)">
+      <rect x="-31" y="-31" width="62" height="62" rx="14" ry="14" fill="#73482F" transform="rotate(45)" stroke="#FFFFFF" stroke-width="3" />
+      <!-- Star icon inside diamond -->
+      <polygon points="0,-16 5,-5 16,-3 8,5 10,16 0,10 -10,16 -8,5 -16,-3 -5,-5" fill="#FFFFFF" />
+    </g>
   </g>
-  
-  <!-- Graph Nodes (Skill Tree Milestones) -->
-  <!-- Root Node 1 -->
-  <circle cx="140" cy="256" r="28" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
-  <circle cx="140" cy="256" r="12" fill="#7A98BF"/>
-  
-  <!-- Branch Node 2A -->
-  <circle cx="230" cy="170" r="26" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
-  <circle cx="230" cy="170" r="11" fill="#73482F"/>
-  
-  <!-- Branch Node 2B -->
-  <circle cx="230" cy="342" r="26" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
-  <circle cx="230" cy="342" r="11" fill="#7A98BF"/>
-  
-  <!-- Master Node 3A -->
-  <circle cx="340" cy="170" r="26" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
-  <circle cx="340" cy="170" r="11" fill="#73482F"/>
-  
-  <!-- Master Node 3B -->
-  <circle cx="340" cy="256" r="30" fill="#FFFFFF" stroke="#73482F" stroke-width="10"/>
-  <circle cx="340" cy="256" r="14" fill="#73482F"/>
-  
-  <!-- Master Node 3C -->
-  <circle cx="340" cy="342" r="26" fill="#FFFFFF" stroke="#6D86A6" stroke-width="10"/>
-  <circle cx="340" cy="342" r="11" fill="#6D86A6"/>
-  
-  <!-- Pinnacle Capstone Trophy Node (Graduation) -->
-  <circle cx="410" cy="256" r="36" fill="#73482F" stroke="#FFFFFF" stroke-width="8"/>
-  <!-- Star icon inside Pinnacle Node -->
-  <polygon points="410,234 416,248 431,250 420,261 423,276 410,268 397,276 400,261 389,250 404,248" fill="#FFFFFF"/>
+
+  <!-- Brand Typography -->
+  <g text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <!-- Line 1: MI MALLA -->
+    <text x="256" y="340" fill="#73482F" font-size="54" font-weight="800" letter-spacing="3" filter="url(#textShadow)">MI MALLA</text>
+    
+    <!-- Line 2: CURRICULAR -->
+    <text x="256" y="398" fill="#7A98BF" font-size="32" font-weight="600" letter-spacing="7">CURRICULAR</text>
+    
+    <!-- Line 3: UDEC CHÍA -->
+    <text x="256" y="456" fill="#1E293B" font-size="34" font-weight="700" letter-spacing="4">UDEC CHÍA</text>
+  </g>
 </svg>
