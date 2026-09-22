@@ -81,6 +81,59 @@ export function getUnlockedTargetCourses(code: string): Course[] {
 }
 
 /**
+ * Returns minimum passing grade required according to Reglamento Estudiantil (Art. 42 REA).
+ * General rule: 3.0 (60% REA).
+ * Special cases: 3.5 (70% REA) for Lengua Extranjera (CAI), Ciudadanía Siglo 21 (CAI),
+ * Cátedra Generación Siglo 21 (CAI), and Prácticas profesionales/pedagógicas/educativas (CADI).
+ */
+export function getMinPassingGrade(course: Course): number {
+  if (course.is_diagnostic) return 3.0
+
+  const nameLower = course.name.toLowerCase()
+  const codeUpper = course.code.toUpperCase()
+  const fieldLower = (course.learning_field || '').toLowerCase()
+
+  // Lengua Extranjera (CAI) / Inglés
+  if (
+    fieldLower === 'idiomas' ||
+    nameLower.includes('lengua extranjera') ||
+    nameLower.includes('inglés') ||
+    nameLower.includes('ingles')
+  ) {
+    return 3.5
+  }
+
+  // Ciudadanía Siglo 21 (CAI)
+  if (
+    nameLower.includes('ciudadanía') ||
+    nameLower.includes('ciudadania') ||
+    codeUpper.includes('CAI1002020303')
+  ) {
+    return 3.5
+  }
+
+  // Cátedra Generación Siglo 21 (CAI)
+  if (
+    nameLower.includes('cátedra generación') ||
+    nameLower.includes('catedra generacion') ||
+    codeUpper.includes('CAI1002020609')
+  ) {
+    return 3.5
+  }
+
+  // Prácticas profesionales, pedagógicas o educativas (CADI)
+  if (nameLower.includes('práctica') || nameLower.includes('practica')) {
+    return 3.5
+  }
+
+  return 3.0
+}
+
+export function isGradePassing(course: Course, grade: number): boolean {
+  return grade >= getMinPassingGrade(course)
+}
+
+/**
  * Calculates the exact computed state for a course based on the student's status map.
  */
 export function calculateCourseState(

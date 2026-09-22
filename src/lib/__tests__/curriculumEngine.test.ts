@@ -6,7 +6,9 @@ import {
   calculateCourseState,
   getAffectedDownstreamCourses,
   calculateCurriculumMetrics,
-  calculateGPAMetrics
+  calculateGPAMetrics,
+  getMinPassingGrade,
+  isGradePassing
 } from '../curriculumEngine'
 import { calculateXP, calculateLevelInfo, evaluateUnlockedAchievements } from '../gamificationEngine'
 import type { CourseStatusType } from '../../types/curriculum'
@@ -135,6 +137,30 @@ describe('Curriculum Engine & DAG Verification', () => {
     expect(gpa.semesterGPAs[1].gpa).toBe(4.34)
     expect(gpa.semesterGPAs[2].gpa).toBeNull()
     expect(gpa.gradedCoursesCount).toBe(2)
+  })
+
+  it('should enforce Art. 42 REA minimum passing grades (3.5 for CAI special cases, 3.0 general)', () => {
+    const courses = getAllCourses()
+    
+    // Lengua Extranjera I -> 3.5
+    const le1 = courses.find(c => c.code === 'CAI1002020304')!
+    expect(getMinPassingGrade(le1)).toBe(3.5)
+    expect(isGradePassing(le1, 3.2)).toBe(false)
+    expect(isGradePassing(le1, 3.5)).toBe(true)
+
+    // Ciudadanía del Siglo 21 -> 3.5
+    const ciud = courses.find(c => c.code === 'CAI1002020303')!
+    expect(getMinPassingGrade(ciud)).toBe(3.5)
+
+    // Cátedra Generación Siglo 21 -> 3.5
+    const cat = courses.find(c => c.code === 'CAI1002020609')!
+    expect(getMinPassingGrade(cat)).toBe(3.5)
+
+    // Contabilidad General (CADI regular) -> 3.0
+    const cont = courses.find(c => c.code === 'CAD102020104')!
+    expect(getMinPassingGrade(cont)).toBe(3.0)
+    expect(isGradePassing(cont, 3.0)).toBe(true)
+    expect(isGradePassing(cont, 2.9)).toBe(false)
   })
 })
 

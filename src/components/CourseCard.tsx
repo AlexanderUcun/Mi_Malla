@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle2, Lock, Zap, Swords, AlertCircle, Edit3, ArrowLeft, ArrowRight } from 'lucide-react'
 import type { Course } from '../types/curriculum'
 import { useCurriculum } from '../context/CurriculumContext'
+import { getMinPassingGrade, isGradePassing } from '../lib/curriculumEngine'
 
 interface CourseCardProps {
   course: Course
@@ -84,6 +85,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   }
 
   const grade = gradesMap.get(course.code)
+  const minGrade = getMinPassingGrade(course)
+  const isPassing = grade !== undefined ? isGradePassing(course, grade) : true
 
   // Base Visual Tokens per State
   let bg = 'var(--node-unlocked-bg)'
@@ -196,6 +199,23 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       {/* Top Header: Category & Credits */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+          {minGrade === 3.5 && (
+            <span
+              style={{
+                fontSize: '9px',
+                fontWeight: 700,
+                padding: '2px 6px',
+                borderRadius: 'var(--radius-full)',
+                backgroundColor: 'rgba(220, 38, 38, 0.10)',
+                color: '#DC2626',
+                border: '1px solid rgba(220, 38, 38, 0.25)'
+              }}
+              title="Exigencia de aprobación especial según Art. 42 REA (Nota mínima 3.5)"
+            >
+              Mín: 3.5
+            </span>
+          )}
+
           {course.is_diagnostic ? (
             <span
               style={{
@@ -303,9 +323,9 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       {/* Footer State & Action Button */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
         {state === 'completed' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-terracotta)', flexWrap: 'wrap' }}>
-            <CheckCircle2 size={14} color="var(--color-terracotta)" />
-            <span>Aprobada</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: !isPassing ? '#DC2626' : 'var(--color-terracotta)', flexWrap: 'wrap' }}>
+            <CheckCircle2 size={14} color={!isPassing ? '#DC2626' : 'var(--color-terracotta)'} />
+            <span>{!isPassing ? 'Insuficiente' : 'Aprobada'}</span>
             {grade !== undefined ? (
               <span
                 style={{
@@ -313,7 +333,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                   fontWeight: 700,
                   padding: '1px 6px',
                   borderRadius: 'var(--radius-full)',
-                  backgroundColor: 'var(--color-terracotta)',
+                  backgroundColor: isPassing ? 'var(--color-terracotta)' : '#DC2626',
                   color: '#FFFFFF'
                 }}
               >
@@ -339,6 +359,20 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-slate-mid)' }}>
             <Swords size={14} color="var(--color-slate-mid)" />
             <span>En curso</span>
+            {grade !== undefined && (
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  padding: '1px 6px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: isPassing ? 'var(--color-slate-mid)' : '#DC2626',
+                  color: '#FFFFFF'
+                }}
+              >
+                {grade.toFixed(1)}
+              </span>
+            )}
           </div>
         ) : state === 'unlocked' ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, color: 'var(--color-steel)' }}>
@@ -346,9 +380,23 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             <span>Disponible</span>
           </div>
         ) : state === 'failed' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#E53E3E' }}>
-            <AlertCircle size={14} color="#E53E3E" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#DC2626' }}>
+            <AlertCircle size={14} color="#DC2626" />
             <span>Por nivelar</span>
+            {grade !== undefined && (
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  padding: '1px 6px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: '#DC2626',
+                  color: '#FFFFFF'
+                }}
+              >
+                {grade.toFixed(1)}
+              </span>
+            )}
           </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-secondary)' }}>

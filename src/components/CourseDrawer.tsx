@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { X, CheckCircle2, Zap, Swords, AlertCircle, ArrowLeft, ArrowRight } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
-import { getCourse, getPrerequisites, getUnlockedTargetCourses } from '../lib/curriculumEngine'
+import { getCourse, getPrerequisites, getUnlockedTargetCourses, getMinPassingGrade } from '../lib/curriculumEngine'
 import type { CourseStatusType } from '../types/curriculum'
 
 interface FormInputs {
@@ -28,8 +28,13 @@ export const CourseDrawer: React.FC = () => {
 
   const prereqs = course ? getPrerequisites(course.code) : []
   const targets = course ? getUnlockedTargetCourses(course.code) : []
+  const minGrade = course ? getMinPassingGrade(course) : 3.0
 
-  const { register, handleSubmit, reset } = useForm<FormInputs>()
+  const { register, handleSubmit, reset, watch } = useForm<FormInputs>()
+
+  const watchedGrade = watch('grade')
+  const inputGradeNum = watchedGrade !== undefined && watchedGrade !== '' ? parseFloat(watchedGrade) : undefined
+  const isInputFailing = inputGradeNum !== undefined && !isNaN(inputGradeNum) && inputGradeNum < minGrade
 
   useEffect(() => {
     if (course) {
@@ -110,22 +115,38 @@ export const CourseDrawer: React.FC = () => {
             </div>
 
             {/* Course Details Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '20px' }}>
-              <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '20px' }}>
+              <div style={{ padding: '10px 6px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
                 <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block' }}>Créditos</span>
-                <strong style={{ fontSize: '16px', color: 'var(--text-primary)' }}>{course.credits}</strong>
+                <strong style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{course.credits}</strong>
               </div>
-              <div style={{ padding: '10px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
+              <div style={{ padding: '10px 6px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-main)', textAlign: 'center' }}>
                 <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block' }}>Categoría</span>
-                <strong style={{ fontSize: '12px', color: 'var(--text-terracotta)' }}>
+                <strong style={{ fontSize: '11px', color: 'var(--text-terracotta)' }}>
                   {{
                     core: 'Disciplinar',
                     diagnostic: 'Diagnóstico',
-                    general_education: 'Formación General',
+                    general_education: 'Formación Gen.',
                     elective: 'Electiva',
-                    specialization: 'Profundización',
-                    capstone: 'Opción de Grado'
+                    specialization: 'Énfasis',
+                    capstone: 'Opción Grado'
                   }[course.category] ?? course.category}
+                </strong>
+              </div>
+              <div
+                style={{
+                  padding: '10px 6px',
+                  borderRadius: 'var(--radius-sm)',
+                  backgroundColor: minGrade === 3.5 ? 'rgba(220, 38, 38, 0.08)' : 'var(--bg-main)',
+                  border: minGrade === 3.5 ? '1px solid rgba(220, 38, 38, 0.25)' : 'none',
+                  textAlign: 'center'
+                }}
+              >
+                <span style={{ fontSize: '10px', color: minGrade === 3.5 ? '#DC2626' : 'var(--text-secondary)', display: 'block', fontWeight: minGrade === 3.5 ? 700 : 400 }}>
+                  Nota Mín.
+                </span>
+                <strong style={{ fontSize: '15px', color: minGrade === 3.5 ? '#DC2626' : 'var(--text-primary)' }}>
+                  {minGrade.toFixed(1)}
                 </strong>
               </div>
             </div>
@@ -339,12 +360,24 @@ export const CourseDrawer: React.FC = () => {
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-card)',
-                    backgroundColor: 'var(--bg-main)',
-                    color: 'var(--text-primary)',
-                    fontSize: '13px'
+                    border: isInputFailing ? '2px solid #DC2626' : '1px solid var(--border-card)',
+                    backgroundColor: isInputFailing ? '#FEF2F2' : 'var(--bg-main)',
+                    color: isInputFailing ? '#DC2626' : 'var(--text-primary)',
+                    fontSize: '13px',
+                    fontWeight: isInputFailing ? 700 : 400
                   }}
                 />
+                {isInputFailing && (
+                  <p style={{ fontSize: '11px', color: '#DC2626', fontWeight: 600, marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <AlertCircle size={13} style={{ flexShrink: 0 }} />
+                    Nota por debajo del mínimo exigido ({minGrade.toFixed(1)}) según Art. 42 REA.
+                  </p>
+                )}
+                {inputGradeNum !== undefined && !isNaN(inputGradeNum) && !isInputFailing && (
+                  <p style={{ fontSize: '11px', color: '#16A34A', fontWeight: 600, marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    ✓ Nota suficiente para aprobar (mínimo {minGrade.toFixed(1)}).
+                  </p>
+                )}
               </div>
 
               <button
