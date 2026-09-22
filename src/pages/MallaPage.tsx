@@ -11,7 +11,8 @@ export const MallaPage: React.FC = () => {
     completeSemester,
     isSimulationMode,
     toggleSimulationMode,
-    gpaMetrics
+    gpaMetrics,
+    hideDiagnosticsInMalla
   } = useCurriculum()
 
   // Zoom Level State (range 0.6x to 1.25x)
@@ -36,6 +37,7 @@ export const MallaPage: React.FC = () => {
   const getCoursesForPeriod = (p: number) =>
     courses
       .filter(c => c.period === p)
+      .filter(c => !hideDiagnosticsInMalla || !c.is_diagnostic)
       .sort((a, b) => {
         if (a.is_diagnostic === b.is_diagnostic) return 0
         return a.is_diagnostic ? 1 : -1

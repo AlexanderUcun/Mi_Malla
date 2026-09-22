@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles } from 'lucide-react'
+import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles, Eye, EyeOff, FileQuestion } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { exportProgressJSON, bulkSaveCourseStatuses } from '../lib/db'
 import { ZUserProgressImport, type UserCourseRecord } from '../types/curriculum'
@@ -14,7 +14,9 @@ export const SettingsPage: React.FC = () => {
     toggleSimulationMode,
     resetProgress,
     levelInfo,
-    metrics
+    metrics,
+    hideDiagnosticsInMalla,
+    toggleHideDiagnosticsInMalla
   } = useCurriculum()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -207,6 +209,55 @@ export const SettingsPage: React.FC = () => {
       </div>
 
 
+
+      {/* Configuración de Pruebas Diagnósticas */}
+      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(67, 56, 202, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FileQuestion size={20} color="#4338CA" />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Pruebas Diagnósticas & Promedio</h3>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              Las pruebas de diagnóstico nivelatorio son asignaturas de <strong>0 créditos</strong>. Puedes registrarles una nota para tu seguimiento personal, pero al tener 0 créditos <strong>no afectan ni suman al promedio ponderado (GPA)</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid var(--border-card)' }}>
+          <div>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              Visibilidad de Diagnósticos en la Malla
+            </span>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              {hideDiagnosticsInMalla
+                ? 'Las 3 pruebas diagnósticas están ocultas en la vista de Malla.'
+                : 'Las 3 pruebas diagnósticas son visibles en el 1º semestre de la Malla.'}
+            </p>
+          </div>
+
+          <button
+            onClick={toggleHideDiagnosticsInMalla}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              borderRadius: 'var(--radius-full)',
+              border: hideDiagnosticsInMalla ? '2px solid var(--color-steel)' : '1px solid var(--border-card)',
+              backgroundColor: hideDiagnosticsInMalla ? 'var(--bg-card-muted)' : 'var(--bg-main)',
+              color: 'var(--text-primary)',
+              fontWeight: 700,
+              fontSize: '12px',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {hideDiagnosticsInMalla ? <EyeOff size={16} color="var(--color-steel)" /> : <Eye size={16} color="var(--color-terracotta)" />}
+            {hideDiagnosticsInMalla ? 'Diagnósticos Ocultos' : 'Diagnósticos Visibles'}
+          </button>
+        </div>
+      </div>
 
       {/* Selector de Tema */}
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

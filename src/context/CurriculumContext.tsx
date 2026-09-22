@@ -4,7 +4,8 @@ import {
   db,
   saveCourseStatus,
   getAllUserCourseRecords,
-  resetAllProgress
+  resetAllProgress,
+  saveSetting
 } from '../lib/db'
 import {
   getAllCourses,
@@ -42,6 +43,10 @@ interface CurriculumContextType {
   toggleTheme: () => void
   inspectedCourseCode: string | null
   setInspectedCourseCode: (code: string | null) => void
+
+  // Diagnostics Visibility State
+  hideDiagnosticsInMalla: boolean
+  toggleHideDiagnosticsInMalla: () => Promise<void>
 
   // Chain Glow Focus State
   focusedCourseCode: string | null
@@ -128,6 +133,18 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
     return map
   }, [allCourses, userStatusMap])
+
+  // Live Query for Hide Diagnostics in Malla setting
+  const liveHideDiag = useLiveQuery(async () => {
+    const rec = await db.user_settings.get('hideDiagnosticsInMalla')
+    return rec ? Boolean(rec.value) : false
+  }, [])
+
+  const hideDiagnosticsInMalla = liveHideDiag ?? false
+
+  const toggleHideDiagnosticsInMalla = async () => {
+    await saveSetting('hideDiagnosticsInMalla', !hideDiagnosticsInMalla)
+  }
 
   // Gamification & Metrics
   const totalXP = useMemo(() => calculateXP(allCourses, userStatusMap), [allCourses, userStatusMap])
@@ -269,6 +286,8 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         toggleTheme,
         inspectedCourseCode,
         setInspectedCourseCode,
+        hideDiagnosticsInMalla,
+        toggleHideDiagnosticsInMalla,
         focusedCourseCode,
         setFocusedCourseCode,
         ancestorPrereqCodes,
