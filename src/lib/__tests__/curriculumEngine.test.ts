@@ -5,7 +5,8 @@ import {
   getCoursesByPeriod,
   calculateCourseState,
   getAffectedDownstreamCourses,
-  calculateCurriculumMetrics
+  calculateCurriculumMetrics,
+  calculateGPAMetrics
 } from '../curriculumEngine'
 import { calculateXP, calculateLevelInfo, evaluateUnlockedAchievements } from '../gamificationEngine'
 import type { CourseStatusType } from '../../types/curriculum'
@@ -110,4 +111,36 @@ describe('Curriculum Engine & DAG Verification', () => {
       }
     }
   })
+
+  it('should calculate weighted semester and cumulative GPA correctly, ignoring ungraded/uncompleted courses', () => {
+    const userMap = new Map<string, CourseStatusType>()
+    const gradesMap = new Map<string, number>()
+
+    // Contabilidad General (S1, 4 cr): 4.0
+    // Fundamentos de Administración (S1, 3 cr): 4.8
+    // Total points S1 = (4.0*4) + (4.8*3) = 16 + 14.4 = 30.4 / 7 cr = 4.34
+    userMap.set('CAD102020104', 'completed')
+    gradesMap.set('CAD102020104', 4.0)
+
+    userMap.set('CAD102020103', 'completed')
+    gradesMap.set('CAD102020103', 4.8)
+
+    // A diagnostic 0-credit course with grade 5.0 (should be excluded from weighted GPA)
+    userMap.set('DNCAI1002020303', 'completed')
+    gradesMap.set('DNCAI1002020303', 5.0)
+
+    const gpa = calculateGPAMetrics(userMap, gradesMap)
+
+    expect(gpa.cumulativeGPA).toBe(4.34)
+    expect(gpa.semesterGPAs[1].gpa).toBe(4.34)
+    expect(gpa.semesterGPAs[2].gpa).toBeNull()
+    expect(gpa.gradedCoursesCount).toBe(2)
+
+    // With includeDiagnosticsInGPA = true: 30.4 + (5.0*1) = 35.4 / 8 cr = 4.43
+    const gpaWithDiag = calculateGPAMetrics(userMap, gradesMap, true)
+    expect(gpaWithDiag.cumulativeGPA).toBe(4.43)
+    expect(gpaWithDiag.gradedCoursesCount).toBe(3)
+  })
 })
+
+

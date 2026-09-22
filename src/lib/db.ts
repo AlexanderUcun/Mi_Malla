@@ -85,3 +85,13 @@ export async function exportProgressJSON(programName: string): Promise<UserProgr
     unlocked_achievements: achievements.map(a => a.achievement_id)
   }
 }
+
+export async function getSetting<T = string | number | boolean>(key: string): Promise<T | undefined> {
+  const rec = await db.user_settings.get(key)
+  return rec?.value as T | undefined
+}
+
+export async function saveSetting(key: string, value: string | number | boolean): Promise<void> {
+  await db.user_settings.put({ key, value })
+}
+

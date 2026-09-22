@@ -12,6 +12,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const {
     computedStateMap,
     customNamesMap,
+    gradesMap,
+    includeDiagnosticsInGPA,
     toggleCourseStatus,
     setInspectedCourseCode,
     focusedCourseCode,
@@ -81,6 +83,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     }
     await toggleCourseStatus(course.code)
   }
+
+  const grade = gradesMap.get(course.code)
 
   // Base Visual Tokens per State
   let bg = 'var(--node-unlocked-bg)'
@@ -300,9 +304,37 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       {/* Footer State & Action Button */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
         {state === 'completed' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-terracotta)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-terracotta)', flexWrap: 'wrap' }}>
             <CheckCircle2 size={14} color="var(--color-terracotta)" />
-            <span>Aprobada ({course.credits * 100} XP)</span>
+            <span>Aprobada</span>
+            {grade !== undefined ? (
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  padding: '1px 6px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: 'var(--color-terracotta)',
+                  color: '#FFFFFF'
+                }}
+              >
+                {grade.toFixed(1)}
+              </span>
+            ) : (!course.is_diagnostic || includeDiagnosticsInGPA) ? (
+              <span
+                style={{
+                  fontSize: '9px',
+                  fontWeight: 600,
+                  padding: '1px 5px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: 'rgba(217, 119, 6, 0.12)',
+                  color: '#D97706',
+                  border: '1px dashed rgba(217, 119, 6, 0.4)'
+                }}
+              >
+                Sin nota
+              </span>
+            ) : null}
           </div>
         ) : state === 'in_progress' ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-slate-mid)' }}>

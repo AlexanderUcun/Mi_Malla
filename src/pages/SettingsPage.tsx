@@ -14,7 +14,9 @@ export const SettingsPage: React.FC = () => {
     toggleSimulationMode,
     resetProgress,
     levelInfo,
-    metrics
+    metrics,
+    includeDiagnosticsInGPA,
+    toggleIncludeDiagnosticsInGPA
   } = useCurriculum()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -204,6 +206,33 @@ export const SettingsPage: React.FC = () => {
             Importar Progreso (.json)
           </button>
         </div>
+      </div>
+
+      {/* Configuración de Promedio y Diagnósticos */}
+      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+        <div>
+          <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Incluir Diagnósticos en Promedio (GPA)</h3>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            Si se activa, las pruebas diagnósticas (0 cr) calificadas sumarán al promedio ponderado con peso de 1 crédito.
+          </p>
+        </div>
+
+        <button
+          onClick={toggleIncludeDiagnosticsInGPA}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-full)',
+            border: includeDiagnosticsInGPA ? '2px solid var(--color-terracotta)' : '1px solid var(--border-card)',
+            backgroundColor: includeDiagnosticsInGPA ? '#FDF0EC' : 'var(--bg-main)',
+            color: includeDiagnosticsInGPA ? 'var(--color-terracotta)' : 'var(--text-primary)',
+            fontWeight: 700,
+            fontSize: '12px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {includeDiagnosticsInGPA ? '✓ Incluidos (1 cr)' : 'Excluidos (Defecto)'}
+        </button>
       </div>
 
       {/* Selector de Tema */}

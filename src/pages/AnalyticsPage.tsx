@@ -73,7 +73,7 @@ const renderAreaBadge = (field: string) => {
 }
 
 export const AnalyticsPage: React.FC = () => {
-  const { metrics, activeTab } = useCurriculum()
+  const { metrics, gpaMetrics, activeTab } = useCurriculum()
 
   // Window Width Hook for Responsive Radar Radius & Layout
   const [windowWidth, setWindowWidth] = React.useState<number>(
@@ -139,7 +139,7 @@ export const AnalyticsPage: React.FC = () => {
       }}
     >
       {/* Top Overview Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '18px 20px', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-sm)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-terracotta)', marginBottom: '8px' }}>
             <GraduationCap size={22} />
@@ -150,6 +150,21 @@ export const AnalyticsPage: React.FC = () => {
           </p>
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
             {metrics.completedCredits} de {metrics.totalCredits} Créditos Aprobados
+          </p>
+        </div>
+
+        <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '18px 20px', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-sm)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-terracotta)', marginBottom: '8px' }}>
+            <Sparkles size={22} />
+            <span style={{ fontSize: '13px', fontWeight: 700 }}>Promedio Acumulado</span>
+          </div>
+          <p style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)' }}>
+            {gpaMetrics.cumulativeGPA !== null ? gpaMetrics.cumulativeGPA.toFixed(2) : 'N/A'}
+          </p>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            {gpaMetrics.gradedCoursesCount > 0
+              ? `${gpaMetrics.gradedCoursesCount} materias con nota (${gpaMetrics.totalCreditsWithGrade} cr)`
+              : 'Sin notas calificadas aún'}
           </p>
         </div>
 

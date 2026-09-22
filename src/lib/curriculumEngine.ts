@@ -193,3 +193,87 @@ export function calculateCurriculumMetrics(userStatusMap: Map<string, CourseStat
     creditsByField
   }
 }
+
+export interface SemesterGPADetail {
+  gpa: number | null
+  totalPoints: number
+  totalCreditsWithGrade: number
+  gradedCoursesCount: number
+}
+
+export interface GPAMetrics {
+  cumulativeGPA: number | null
+  totalPoints: number
+  totalCreditsWithGrade: number
+  gradedCoursesCount: number
+  semesterGPAs: Record<number, SemesterGPADetail>
+}
+
+/**
+ * Calculates weighted GPA per semester and cumulative GPA across the curriculum.
+ * Only includes completed courses that have an explicit grade (0.0 to 5.0).
+ * If includeDiagnosticsInGPA is true, 0-credit diagnostic courses with grades count with effective weight of 1.
+ */
+export function calculateGPAMetrics(
+  userStatusMap: Map<string, CourseStatusType>,
+  gradesMap: Map<string, number>,
+  includeDiagnosticsInGPA: boolean = false
+): GPAMetrics {
+  let cumulativePoints = 0
+  let cumulativeCredits = 0
+  let cumulativeGradedCount = 0
+
+  const semesterGPAs: Record<number, SemesterGPADetail> = {}
+  for (let p = 1; p <= validatedSeed.program.total_periods; p++) {
+    semesterGPAs[p] = {
+      gpa: null,
+      totalPoints: 0,
+      totalCreditsWithGrade: 0,
+      gradedCoursesCount: 0
+    }
+  }
+
+  for (const course of validatedSeed.courses) {
+    const isCompleted = userStatusMap.get(course.code) === 'completed'
+    const grade = gradesMap.get(course.code)
+
+    if (isCompleted && grade !== undefined && grade !== null && !isNaN(grade)) {
+      const effectiveCredits = (course.credits === 0 && includeDiagnosticsInGPA) ? 1 : course.credits
+
+      if (effectiveCredits > 0) {
+        const points = grade * effectiveCredits
+        cumulativePoints += points
+        cumulativeCredits += effectiveCredits
+        cumulativeGradedCount++
+
+        const semDetail = semesterGPAs[course.period]
+        if (semDetail) {
+          semDetail.totalPoints += points
+          semDetail.totalCreditsWithGrade += effectiveCredits
+          semDetail.gradedCoursesCount++
+        }
+      }
+    }
+  }
+
+  // Compute GPAs
+  for (let p = 1; p <= validatedSeed.program.total_periods; p++) {
+    const sem = semesterGPAs[p]
+    if (sem.totalCreditsWithGrade > 0) {
+      sem.gpa = Math.round((sem.totalPoints / sem.totalCreditsWithGrade) * 100) / 100
+    }
+  }
+
+  const cumulativeGPA = cumulativeCredits > 0
+    ? Math.round((cumulativePoints / cumulativeCredits) * 100) / 100
+    : null
+
+  return {
+    cumulativeGPA,
+    totalPoints: cumulativePoints,
+    totalCreditsWithGrade: cumulativeCredits,
+    gradedCoursesCount: cumulativeGradedCount,
+    semesterGPAs
+  }
+}
+

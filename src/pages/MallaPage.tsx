@@ -10,7 +10,8 @@ export const MallaPage: React.FC = () => {
     setSelectedPeriod,
     completeSemester,
     isSimulationMode,
-    toggleSimulationMode
+    toggleSimulationMode,
+    gpaMetrics
   } = useCurriculum()
 
   // Zoom Level State (range 0.6x to 1.25x)
@@ -304,9 +305,27 @@ export const MallaPage: React.FC = () => {
                   <h2 style={{ fontSize: isCompact ? '15px' : '18px', fontWeight: 800, color: 'var(--text-primary)' }}>
                     {periodNum}º Semestre
                   </h2>
-                  <p style={{ fontSize: isCompact ? '11px' : '12px', color: 'var(--text-secondary)' }}>
-                    {totalPeriodCredits} Cr. · {periodCourses.length} Asig.
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
+                    <p style={{ fontSize: isCompact ? '11px' : '12px', color: 'var(--text-secondary)' }}>
+                      {totalPeriodCredits} Cr. · {periodCourses.length} Asig.
+                    </p>
+                    {gpaMetrics?.semesterGPAs[periodNum]?.gpa !== null && (
+                      <span
+                        style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          padding: '1px 6px',
+                          borderRadius: 'var(--radius-full)',
+                          backgroundColor: 'rgba(115, 72, 47, 0.12)',
+                          color: 'var(--color-terracotta)',
+                          border: '1px solid rgba(115, 72, 47, 0.25)',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        Prom: {gpaMetrics.semesterGPAs[periodNum].gpa?.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <button
