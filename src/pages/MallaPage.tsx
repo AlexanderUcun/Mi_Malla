@@ -1,5 +1,5 @@
 import React from 'react'
-import { CheckCheck, FlaskConical } from 'lucide-react'
+import { CheckCheck, FlaskConical, EyeOff } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { CourseCard } from '../components/CourseCard'
 
@@ -273,6 +273,7 @@ export const MallaPage: React.FC = () => {
         {periods.map(periodNum => {
           const periodCourses = getCoursesForPeriod(periodNum)
           const totalPeriodCredits = periodCourses.reduce((sum, c) => sum + c.credits, 0)
+          const hiddenDiagCount = courses.filter(c => c.period === periodNum && c.is_diagnostic).length
 
           return (
             <div
@@ -351,6 +352,29 @@ export const MallaPage: React.FC = () => {
                   {!isCompact && 'Completar'}
                 </button>
               </div>
+
+              {/* Alerta Mínima de Diagnósticos Ocultos */}
+              {hideDiagnosticsInMalla && hiddenDiagCount > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 10px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'rgba(122, 152, 191, 0.10)',
+                    border: '1px dashed var(--color-slate-mid)',
+                    color: 'var(--text-secondary)',
+                    fontSize: '11px',
+                    fontWeight: 600
+                  }}
+                >
+                  <EyeOff size={13} color="var(--color-steel)" style={{ flexShrink: 0 }} />
+                  <span>
+                    {hiddenDiagCount} diagnóstic{hiddenDiagCount > 1 ? 'os' : 'o'} oculto{hiddenDiagCount > 1 ? 's' : ''} en este semestre
+                  </span>
+                </div>
+              )}
 
               {/* Lista de Tarjetas de Materia */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: isCompact ? '8px' : '12px' }}>
