@@ -135,6 +135,11 @@ describe('Curriculum Engine & DAG Verification', () => {
     expect(gpa.semesterGPAs[1].gpa).toBe(4.34)
     expect(gpa.semesterGPAs[2].gpa).toBeNull()
     expect(gpa.gradedCoursesCount).toBe(2)
+
+    // When includeDiagnosticsInGPA = true, diagnostic with grade 5.0 is included in GPA divisor
+    const gpaWithDiag = calculateGPAMetrics(userMap, gradesMap, true)
+    expect(gpaWithDiag.cumulativeGPA).toBe(4.43)
+    expect(gpaWithDiag.gradedCoursesCount).toBe(3)
   })
 })
 

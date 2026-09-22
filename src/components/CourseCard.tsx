@@ -13,6 +13,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     computedStateMap,
     customNamesMap,
     gradesMap,
+    includeDiagnosticsInGPA,
     toggleCourseStatus,
     setInspectedCourseCode,
     focusedCourseCode,
@@ -319,7 +320,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               >
                 {grade.toFixed(1)}
               </span>
-            ) : !course.is_diagnostic ? (
+            ) : (!course.is_diagnostic || includeDiagnosticsInGPA) ? (
               <span
                 style={{
                   fontSize: '9px',
