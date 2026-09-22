@@ -48,10 +48,10 @@ export const SettingsPage: React.FC = () => {
     try {
       const text = await file.text()
       const json = JSON.parse(text)
-      
+
       // Strict Zod Validation before touching Dexie.js
       const validatedData = ZUserProgressImport.parse(json)
-      
+
       await bulkSaveCourseStatuses(validatedData.records as UserCourseRecord[])
       setImportStatus('✅ Progreso importado con éxito.')
       setTimeout(() => setImportStatus(null), 4000)
@@ -146,7 +146,7 @@ export const SettingsPage: React.FC = () => {
       {/* Exportar e Importar Progreso */}
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Copia de Seguridad y Portabilidad (100% Offline)</h3>
-        
+
         {importStatus && (
           <div style={{ padding: '10px 14px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-card-muted)', fontSize: '13px', fontWeight: 600 }}>
             {importStatus}
@@ -231,8 +231,8 @@ export const SettingsPage: React.FC = () => {
             </span>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
               {hideDiagnosticsInMalla
-                ? 'Las 3 pruebas diagnósticas están ocultas en la vista de Malla.'
-                : 'Las 3 pruebas diagnósticas son visibles en el 1º semestre de la Malla.'}
+                ? 'Las 6 pruebas diagnósticas están ocultas en la vista de Malla.'
+                : 'Las 6 pruebas diagnósticas son visibles en la malla.'}
             </p>
           </div>
 
