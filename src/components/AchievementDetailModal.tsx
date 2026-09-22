@@ -158,7 +158,9 @@ export const AchievementDetailModal: React.FC<AchievementDetailModalProps> = ({ 
               {/* Lista de Asignaturas Requeridas */}
               <div>
                 <h4 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '10px' }}>
-                  Asignaturas Requeridas:
+                  {detail.totalRequired === 1 && detail.isUnlocked
+                    ? 'Asignatura que cumplió el requisito:'
+                    : `Asignaturas Requeridas (${detail.totalCompleted}/${detail.totalRequired}):`}
                 </h4>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

@@ -12,16 +12,16 @@ export interface LevelConfig {
 }
 
 export const LEVEL_CONFIGS: LevelConfig[] = [
-  { level: 1,  title: 'Recluta Universitario',     minXP: 0,     maxXP: 1000 },
-  { level: 2,  title: 'Explorador de Conceptos',   minXP: 1001,  maxXP: 2500 },
-  { level: 3,  title: 'Analista Junior',           minXP: 2501,  maxXP: 4200 },
-  { level: 4,  title: 'Estratega en Formación',    minXP: 4201,  maxXP: 6100 },
-  { level: 5,  title: 'Gestor de Proyectos',       minXP: 6101,  maxXP: 8200 },
-  { level: 6,  title: 'Consultor Organizacional',  minXP: 8201,  maxXP: 10400 },
-  { level: 7,  title: 'Director de Área',          minXP: 10401, maxXP: 12600 },
-  { level: 8,  title: 'Ejecutivo Máster',          minXP: 12601, maxXP: 14400 },
-  { level: 9,  title: 'Candidato a Título',        minXP: 14401, maxXP: 15799 },
-  { level: 10, title: 'Administrador Legendario',  minXP: 15800, maxXP: 15800 }
+  { level: 1, title: 'Recluta Universitario', minXP: 0, maxXP: 1000 },
+  { level: 2, title: 'Explorador de Conceptos', minXP: 1001, maxXP: 2500 },
+  { level: 3, title: 'Analista Junior', minXP: 2501, maxXP: 4200 },
+  { level: 4, title: 'Estratega en Formación', minXP: 4201, maxXP: 6100 },
+  { level: 5, title: 'Gestor de Proyectos', minXP: 6101, maxXP: 8200 },
+  { level: 6, title: 'Consultor Organizacional', minXP: 8201, maxXP: 10400 },
+  { level: 7, title: 'Director de Área', minXP: 10401, maxXP: 12600 },
+  { level: 8, title: 'Ejecutivo Máster', minXP: 12601, maxXP: 14400 },
+  { level: 9, title: 'Candidato a Título', minXP: 14401, maxXP: 15799 },
+  { level: 10, title: 'Administrador Legendario', minXP: 15800, maxXP: 15800 }
 ]
 
 /**
@@ -43,7 +43,7 @@ export function calculateXP(courses: Course[], userStatusMap: Map<string, Course
  */
 export function calculateLevelInfo(xp: number): LevelInfo {
   const currentXP = Math.max(0, Math.min(15800, xp))
-  
+
   let currentLevelConfig = LEVEL_CONFIGS[0]
   for (const cfg of LEVEL_CONFIGS) {
     if (currentXP >= cfg.minXP) {
@@ -76,24 +76,24 @@ export function calculateLevelInfo(xp: number): LevelInfo {
 
 export const ACHIEVEMENTS_CATALOG: Achievement[] = [
   {
-    id: 'PRIMER_PASO',
-    title: 'Primer Paso al Título',
-    description: 'Aprobar la primera materia regular del plan de estudios.',
-    iconName: 'Footprints',
-    category: 'milestone',
+    id: 'MENTE_CALIBRADA',
+    title: 'Mente Calibrada',
+    description: 'Superar las pruebas de diagnóstico nivelatorio de Semestre 1 y 2.',
+    iconName: 'BrainCheck',
+    category: 'special',
     criteriaFn: (courses, userStatusMap) => {
-      return courses.some(c => !c.is_diagnostic && userStatusMap.get(c.code) === 'completed')
+      const diagCourses = courses.filter(c => c.is_diagnostic && (c.period === 1 || c.period === 2))
+      return diagCourses.length > 0 && diagCourses.every(c => userStatusMap.get(c.code) === 'completed')
     }
   },
   {
-    id: 'MENTE_CALIBRADA',
-    title: 'Mente Calibrada',
-    description: 'Superar las 3 pruebas de diagnóstico nivelatorio iniciales.',
-    iconName: 'BrainCheck',
+    id: 'INVESTIGADOR',
+    title: 'Investigador Nato',
+    description: 'Superar el Diagnóstico Nivelatorio de Fundamentos de Investigación.',
+    iconName: 'FlaskConical',
     category: 'special',
     criteriaFn: (_courses, userStatusMap) => {
-      const diagCodes = ['DNCAI1002020303', 'DNCAI1002020612', 'DNCAI1002020201']
-      return diagCodes.every(code => userStatusMap.get(code) === 'completed')
+      return userStatusMap.get('DNCTI102020628') === 'completed'
     }
   },
   {
@@ -138,6 +138,39 @@ export const ACHIEVEMENTS_CATALOG: Achievement[] = [
     criteriaFn: (courses, userStatusMap) => {
       const sem1Courses = courses.filter(c => c.period === 1)
       return sem1Courses.length > 0 && sem1Courses.every(c => userStatusMap.get(c.code) === 'completed')
+    }
+  },
+  {
+    id: 'SEM_3_MASTER',
+    title: 'Dominio del 3º Semestre',
+    description: 'Aprobar el 100% de las materias del Tercer Semestre.',
+    iconName: 'Award',
+    category: 'milestone',
+    criteriaFn: (courses, userStatusMap) => {
+      const sem3Courses = courses.filter(c => c.period === 3)
+      return sem3Courses.length > 0 && sem3Courses.every(c => userStatusMap.get(c.code) === 'completed')
+    }
+  },
+  {
+    id: 'SEM_5_MASTER',
+    title: 'Conquistador del 5º Semestre',
+    description: 'Aprobar el 100% de las materias del Quinto Semestre.',
+    iconName: 'Award',
+    category: 'milestone',
+    criteriaFn: (courses, userStatusMap) => {
+      const sem5Courses = courses.filter(c => c.period === 5)
+      return sem5Courses.length > 0 && sem5Courses.every(c => userStatusMap.get(c.code) === 'completed')
+    }
+  },
+  {
+    id: 'SEM_7_MASTER',
+    title: 'Veterano del 7º Semestre',
+    description: 'Aprobar el 100% de las materias del Séptimo Semestre.',
+    iconName: 'Award',
+    category: 'milestone',
+    criteriaFn: (courses, userStatusMap) => {
+      const sem7Courses = courses.filter(c => c.period === 7)
+      return sem7Courses.length > 0 && sem7Courses.every(c => userStatusMap.get(c.code) === 'completed')
     }
   },
   {
@@ -188,12 +221,13 @@ export function getAchievementProgressDetail(
 
   let requiredCourseObjects: Course[] = []
 
+  // IMPORTANT: These filters MUST match the criteriaFn logic exactly
   switch (achievementId) {
-    case 'PRIMER_PASO':
-      requiredCourseObjects = courses.filter(c => !c.is_diagnostic)
-      break
     case 'MENTE_CALIBRADA':
-      requiredCourseObjects = courses.filter(c => c.is_diagnostic)
+      requiredCourseObjects = courses.filter(c => c.is_diagnostic && (c.period === 1 || c.period === 2))
+      break
+    case 'INVESTIGADOR':
+      requiredCourseObjects = courses.filter(c => c.code === 'DNCTI102020628')
       break
     case 'LOBO_WALL_STREET':
       requiredCourseObjects = courses.filter(c => c.learning_field === 'Finanzas')
@@ -201,12 +235,22 @@ export function getAchievementProgressDetail(
     case 'LIDER_EQUIPOS':
       requiredCourseObjects = courses.filter(c => c.learning_field === 'Talento Humano')
       break
-    case 'POLIGLOTA':
+    case 'POLIGLOTA': {
       const langCodes = ['CAI1002020304', 'CAI1002020406', 'CAI1002020507', 'CAI1002020608']
       requiredCourseObjects = courses.filter(c => langCodes.includes(c.code))
       break
+    }
     case 'SEM_1_MASTER':
       requiredCourseObjects = courses.filter(c => c.period === 1)
+      break
+    case 'SEM_3_MASTER':
+      requiredCourseObjects = courses.filter(c => c.period === 3)
+      break
+    case 'SEM_5_MASTER':
+      requiredCourseObjects = courses.filter(c => c.period === 5)
+      break
+    case 'SEM_7_MASTER':
+      requiredCourseObjects = courses.filter(c => c.period === 7)
       break
     case 'ESPECIALISTA':
       requiredCourseObjects = courses.filter(c => c.code === 'CAD102020950C')
@@ -217,22 +261,7 @@ export function getAchievementProgressDetail(
   }
 
   const isUnlocked = achievement.criteriaFn(courses, userStatusMap)
-  
-  if (achievementId === 'PRIMER_PASO') {
-    const completedCount = requiredCourseObjects.filter(c => userStatusMap.get(c.code) === 'completed').length
-    const isDone = completedCount > 0
-    return {
-      achievement,
-      isUnlocked,
-      requiredCourses: requiredCourseObjects.slice(0, 4).map(c => ({
-        course: c,
-        isCompleted: userStatusMap.get(c.code) === 'completed'
-      })),
-      totalRequired: 1,
-      totalCompleted: isDone ? 1 : 0,
-      percentage: isDone ? 100 : 0
-    }
-  }
+
 
   const requiredCourses = requiredCourseObjects.map(c => ({
     course: c,

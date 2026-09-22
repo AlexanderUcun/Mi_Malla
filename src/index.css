@@ -22,6 +22,11 @@
   --text-terracotta:   #73482F; /* Highlighted text & headers */
   --text-white:        #FFFFFF;
 
+  /* Toast Notification Tokens */
+  --bg-toast:          #232B38;
+  --text-toast:        #FFFFFF;
+  --text-toast-action: #D9D3C7;
+
   /* Node States Visual Tokens */
   --node-locked-bg:    #EFECE6;
   --node-locked-border:#A4ADBF;
@@ -68,6 +73,10 @@
   --text-primary:      #F1F5F9;
   --text-secondary:    #94A3B8;
   --text-terracotta:   #E07A5F;
+
+  --bg-toast:          #1B222D;
+  --text-toast:        #F1F5F9;
+  --text-toast-action: #E07A5F;
 
   --node-locked-bg:    #18202C;
   --node-locked-border:#3A4A62;

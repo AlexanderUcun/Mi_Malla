@@ -1,5 +1,5 @@
 import React from 'react'
-import { CheckCheck, RotateCcw, FlaskConical } from 'lucide-react'
+import { CheckCheck, FlaskConical } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { CourseCard } from '../components/CourseCard'
 
@@ -9,9 +9,6 @@ export const MallaPage: React.FC = () => {
     selectedPeriod,
     setSelectedPeriod,
     completeSemester,
-    undoState,
-    undoLastAction,
-    clearUndo,
     isSimulationMode,
     toggleSimulationMode
   } = useCurriculum()
@@ -176,52 +173,6 @@ export const MallaPage: React.FC = () => {
 
   return (
     <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Undo Toast Notification */}
-      {undoState && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '80px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 50,
-            backgroundColor: 'var(--text-primary)',
-            color: '#FFFFFF',
-            padding: '10px 18px',
-            borderRadius: 'var(--radius-full)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            boxShadow: 'var(--shadow-lg)',
-            fontSize: '13px',
-            animation: 'fadeIn 0.2s ease'
-          }}
-        >
-          <span>Estado de asignatura actualizado</span>
-          <button
-            onClick={undoLastAction}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--color-sand)',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            <RotateCcw size={14} /> Deshacer
-          </button>
-          <button
-            onClick={clearUndo}
-            style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', marginLeft: '4px' }}
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
       {/* Simulation Banner (only if active) */}
       {isSimulationMode && (
         <div
