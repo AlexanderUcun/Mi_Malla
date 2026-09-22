@@ -44,6 +44,23 @@ export const MallaPage: React.FC = () => {
       })
 
   const isPillClickRef = React.useRef(false)
+  const pillsContainerRef = React.useRef<HTMLDivElement>(null)
+
+  // Auto-scroll active pill horizontally inside pills container ONLY (without jumping the window vertically)
+  React.useEffect(() => {
+    const pillsContainer = pillsContainerRef.current
+    const activePill = document.getElementById(`period-pill-${selectedPeriod}`)
+    if (pillsContainer && activePill) {
+      const containerRect = pillsContainer.getBoundingClientRect()
+      const pillRect = activePill.getBoundingClientRect()
+      const targetLeft =
+        pillsContainer.scrollLeft +
+        (pillRect.left - containerRect.left) -
+        containerRect.width / 2 +
+        pillRect.width / 2
+      pillsContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' })
+    }
+  }, [selectedPeriod])
 
   const handlePeriodPillClick = (periodNum: number) => {
     setSelectedPeriod(periodNum)
@@ -51,7 +68,9 @@ export const MallaPage: React.FC = () => {
     const container = containerRef.current
     const el = document.getElementById(`period-col-${periodNum}`)
     if (container && el) {
-      const targetLeft = el.offsetLeft - container.offsetLeft
+      const containerRect = container.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+      const targetLeft = container.scrollLeft + (elRect.left - containerRect.left)
       container.scrollTo({ left: targetLeft, behavior: 'smooth' })
       setTimeout(() => {
         isPillClickRef.current = false
@@ -59,32 +78,39 @@ export const MallaPage: React.FC = () => {
     }
   }
 
+  const scrollTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const handleScroll = () => {
     if (isPillClickRef.current) return
     const container = containerRef.current
     if (!container) return
 
-    const scrollLeft = container.scrollLeft
-    const containerLeft = container.offsetLeft
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current)
+    }
 
-    let closestPeriod = 1
-    let minDistance = Infinity
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (!container) return
+      const containerRect = container.getBoundingClientRect()
+      let closestPeriod = 1
+      let minDistance = Infinity
 
-    for (const p of periods) {
-      const el = document.getElementById(`period-col-${p}`)
-      if (el) {
-        const elLeft = el.offsetLeft - containerLeft
-        const dist = Math.abs(elLeft - scrollLeft)
-        if (dist < minDistance) {
-          minDistance = dist
-          closestPeriod = p
+      for (const p of periods) {
+        const el = document.getElementById(`period-col-${p}`)
+        if (el) {
+          const elRect = el.getBoundingClientRect()
+          const dist = Math.abs(elRect.left - containerRect.left)
+          if (dist < minDistance) {
+            minDistance = dist
+            closestPeriod = p
+          }
         }
       }
-    }
 
-    if (closestPeriod !== selectedPeriod) {
-      setSelectedPeriod(closestPeriod)
-    }
+      if (closestPeriod !== selectedPeriod) {
+        setSelectedPeriod(closestPeriod)
+      }
+    }, 100)
   }
 
   // Registrar listeners nativos con passive: false para que e.preventDefault() funcione correctamente
@@ -235,13 +261,25 @@ export const MallaPage: React.FC = () => {
       )}
 
       {/* Selector Rápido de Semestre (Pills 1 al 9) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+      <div
+        ref={pillsContainerRef}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          overflowX: 'auto',
+          paddingBottom: '6px',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', whiteSpace: 'nowrap', marginRight: '4px' }}>
           Ir a Semestre:
         </span>
         {periods.map(p => (
           <button
             key={p}
+            id={`period-pill-${p}`}
             onClick={() => handlePeriodPillClick(p)}
             style={{
               padding: '6px 14px',
@@ -253,7 +291,8 @@ export const MallaPage: React.FC = () => {
               fontWeight: 700,
               cursor: 'pointer',
               whiteSpace: 'nowrap',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              boxShadow: selectedPeriod === p ? 'var(--shadow-terracotta)' : 'none'
             }}
           >
             {p}º
