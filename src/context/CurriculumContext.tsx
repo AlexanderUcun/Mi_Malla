@@ -82,13 +82,65 @@ const CurriculumContext = createContext<CurriculumContextType | null>(null)
 
 export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<number>(1)
-  const [activeTab, setActiveTab] = useState<'malla' | 'logros' | 'analytics' | 'settings' | 'about'>('malla')
+  const [activeTab, setActiveTabState] = useState<'malla' | 'logros' | 'analytics' | 'settings' | 'about'>('malla')
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
-  const [inspectedCourseCode, setInspectedCourseCode] = useState<string | null>(null)
+  const [inspectedCourseCode, setInspectedCourseCodeState] = useState<string | null>(null)
   const [focusedCourseCode, setFocusedCourseCode] = useState<string | null>(null)
   const [isSimulationMode, setIsSimulationMode] = useState<boolean>(false)
   const [simulatedStatuses, setSimulatedStatuses] = useState<Map<string, CourseStatusType>>(new Map())
   const [undoState, setUndoState] = useState<{ code: string; previousStatus: CourseStatusType } | null>(null)
+
+  // Mobile PWA Back Button & History Navigation Handlers
+  const setActiveTab = (tab: 'malla' | 'logros' | 'analytics' | 'settings' | 'about') => {
+    if (tab !== activeTab) {
+      if (typeof window !== 'undefined' && window.history) {
+        window.history.pushState({ tab }, '')
+      }
+      setActiveTabState(tab)
+    }
+  }
+
+  const setInspectedCourseCode = (code: string | null) => {
+    if (typeof window !== 'undefined' && window.history) {
+      if (code !== null && inspectedCourseCode === null) {
+        window.history.pushState({ modal: 'drawer', code, tab: activeTab }, '')
+      } else if (code === null && inspectedCourseCode !== null) {
+        if (window.history.state && window.history.state.modal === 'drawer') {
+          window.history.back()
+          setInspectedCourseCodeState(null)
+          return
+        }
+      }
+    }
+    setInspectedCourseCodeState(code)
+  }
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined' || !window.history) return
+
+    // Ensure initial entry has state
+    if (window.history.state === null) {
+      window.history.replaceState({ tab: 'malla' }, '')
+    }
+
+    const handlePopState = (e: PopStateEvent) => {
+      // 1. Intercept Back button gesture when Course Drawer is open
+      if (inspectedCourseCode !== null) {
+        setInspectedCourseCodeState(null)
+        return
+      }
+
+      // 2. Intercept Back button gesture for Tab Navigation
+      if (e.state && e.state.tab) {
+        setActiveTabState(e.state.tab)
+      } else {
+        setActiveTabState('malla')
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [inspectedCourseCode])
 
   // Live Query from Dexie.js (Reactive Local-First)
   const liveRecords = useLiveQuery(async () => {
