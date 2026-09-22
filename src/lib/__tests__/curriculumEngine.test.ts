@@ -135,11 +135,6 @@ describe('Curriculum Engine & DAG Verification', () => {
     expect(gpa.semesterGPAs[1].gpa).toBe(4.34)
     expect(gpa.semesterGPAs[2].gpa).toBeNull()
     expect(gpa.gradedCoursesCount).toBe(2)
-
-    // With includeDiagnosticsInGPA = true: 30.4 + (5.0*1) = 35.4 / 8 cr = 4.43
-    const gpaWithDiag = calculateGPAMetrics(userMap, gradesMap, true)
-    expect(gpaWithDiag.cumulativeGPA).toBe(4.43)
-    expect(gpaWithDiag.gradedCoursesCount).toBe(3)
   })
 })
 

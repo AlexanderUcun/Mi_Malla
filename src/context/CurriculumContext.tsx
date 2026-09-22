@@ -4,8 +4,7 @@ import {
   db,
   saveCourseStatus,
   getAllUserCourseRecords,
-  resetAllProgress,
-  saveSetting
+  resetAllProgress
 } from '../lib/db'
 import {
   getAllCourses,
@@ -67,8 +66,6 @@ interface CurriculumContextType {
   unlockedAchievements: Achievement[]
   metrics: ReturnType<typeof calculateCurriculumMetrics>
   gpaMetrics: ReturnType<typeof calculateGPAMetrics>
-  includeDiagnosticsInGPA: boolean
-  toggleIncludeDiagnosticsInGPA: () => Promise<void>
   
   // Undo Toast State
   undoState: { code: string; previousStatus: CourseStatusType } | null
@@ -132,18 +129,6 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return map
   }, [allCourses, userStatusMap])
 
-  // Live Query for settings
-  const liveSetting = useLiveQuery(async () => {
-    const rec = await db.user_settings.get('includeDiagnosticsInGPA')
-    return rec ? Boolean(rec.value) : false
-  }, [])
-
-  const includeDiagnosticsInGPA = liveSetting ?? false
-
-  const toggleIncludeDiagnosticsInGPA = async () => {
-    await saveSetting('includeDiagnosticsInGPA', !includeDiagnosticsInGPA)
-  }
-
   // Gamification & Metrics
   const totalXP = useMemo(() => calculateXP(allCourses, userStatusMap), [allCourses, userStatusMap])
   const levelInfo = useMemo(() => calculateLevelInfo(totalXP), [totalXP])
@@ -152,10 +137,7 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     [allCourses, userStatusMap]
   )
   const metrics = useMemo(() => calculateCurriculumMetrics(userStatusMap), [userStatusMap])
-  const gpaMetrics = useMemo(
-    () => calculateGPAMetrics(userStatusMap, gradesMap, includeDiagnosticsInGPA),
-    [userStatusMap, gradesMap, includeDiagnosticsInGPA]
-  )
+  const gpaMetrics = useMemo(() => calculateGPAMetrics(userStatusMap, gradesMap), [userStatusMap, gradesMap])
 
   // Chain Glow Ancestors & Descendants calculation
   const { ancestorPrereqCodes, descendantUnlockCodes } = useMemo(() => {
@@ -303,8 +285,6 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         unlockedAchievements,
         metrics,
         gpaMetrics,
-        includeDiagnosticsInGPA,
-        toggleIncludeDiagnosticsInGPA,
         undoState,
         undoLastAction,
         clearUndo
