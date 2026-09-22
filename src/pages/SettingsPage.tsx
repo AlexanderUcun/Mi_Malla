@@ -14,9 +14,7 @@ export const SettingsPage: React.FC = () => {
     toggleSimulationMode,
     resetProgress,
     levelInfo,
-    metrics,
-    includeDiagnosticsInGPA,
-    toggleIncludeDiagnosticsInGPA
+    metrics
   } = useCurriculum()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -209,32 +207,6 @@ export const SettingsPage: React.FC = () => {
       </div>
 
 
-      {/* Configuración de Promedio y Diagnósticos */}
-      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
-        <div>
-          <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Sumar Notas de Diagnósticos al Promedio</h3>
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-            Si se activa, los diagnósticos con nota sumarán al promedio sin alterar los créditos totales (0 cr) de la carrera.
-          </p>
-        </div>
-
-        <button
-          onClick={toggleIncludeDiagnosticsInGPA}
-          style={{
-            padding: '8px 16px',
-            borderRadius: 'var(--radius-full)',
-            border: includeDiagnosticsInGPA ? '2px solid var(--color-terracotta)' : '1px solid var(--border-card)',
-            backgroundColor: includeDiagnosticsInGPA ? '#FDF0EC' : 'var(--bg-main)',
-            color: includeDiagnosticsInGPA ? 'var(--color-terracotta)' : 'var(--text-primary)',
-            fontWeight: 700,
-            fontSize: '12px',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {includeDiagnosticsInGPA ? '✓ Activado' : 'Desactivado'}
-        </button>
-      </div>
 
       {/* Selector de Tema */}
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

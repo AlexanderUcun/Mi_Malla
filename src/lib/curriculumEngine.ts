@@ -211,13 +211,11 @@ export interface GPAMetrics {
 
 /**
  * Calculates weighted GPA per semester and cumulative GPA across the curriculum.
- * Only includes completed courses that have an explicit grade (0.0 to 5.0).
- * If includeDiagnosticsInGPA is true, 0-credit diagnostic courses with grades count with effective divisor weight of 1.
+ * Only includes completed courses with >0 credits that have an explicit grade (0.0 to 5.0).
  */
 export function calculateGPAMetrics(
   userStatusMap: Map<string, CourseStatusType>,
-  gradesMap: Map<string, number>,
-  includeDiagnosticsInGPA: boolean = false
+  gradesMap: Map<string, number>
 ): GPAMetrics {
   let cumulativePoints = 0
   let cumulativeCredits = 0
@@ -238,18 +236,16 @@ export function calculateGPAMetrics(
     const grade = gradesMap.get(course.code)
 
     if (isCompleted && grade !== undefined && grade !== null && !isNaN(grade)) {
-      const weight = course.credits > 0 ? course.credits : (includeDiagnosticsInGPA ? 1 : 0)
-
-      if (weight > 0) {
-        const points = grade * weight
+      if (course.credits > 0) {
+        const points = grade * course.credits
         cumulativePoints += points
-        cumulativeCredits += weight
+        cumulativeCredits += course.credits
         cumulativeGradedCount++
 
         const semDetail = semesterGPAs[course.period]
         if (semDetail) {
           semDetail.totalPoints += points
-          semDetail.totalCreditsWithGrade += weight
+          semDetail.totalCreditsWithGrade += course.credits
           semDetail.gradedCoursesCount++
         }
       }

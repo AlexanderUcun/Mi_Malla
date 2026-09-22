@@ -19,7 +19,6 @@ export const CourseDrawer: React.FC = () => {
     userStatusMap,
     customNamesMap,
     gradesMap,
-    includeDiagnosticsInGPA,
     setCourseStatus,
     setCourseExtras
   } = useCurriculum()
@@ -323,7 +322,7 @@ export const CourseDrawer: React.FC = () => {
                   <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>
                     Nota / Calificación Referencial:
                   </label>
-                  {state === 'completed' && (!course.is_diagnostic || includeDiagnosticsInGPA) && gradesMap.get(course.code) === undefined && (
+                  {state === 'completed' && !course.is_diagnostic && gradesMap.get(course.code) === undefined && (
                     <span style={{ fontSize: '10px', fontWeight: 700, color: '#D97706', backgroundColor: 'rgba(217, 119, 6, 0.12)', padding: '2px 6px', borderRadius: 'var(--radius-full)' }}>
                       Sin nota
                     </span>
