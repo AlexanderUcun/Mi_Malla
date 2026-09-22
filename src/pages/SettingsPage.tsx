@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles, Eye, EyeOff, FileQuestion } from 'lucide-react'
+import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles, Eye, EyeOff, FileQuestion, ShieldCheck } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { exportProgressJSON, bulkSaveCourseStatuses } from '../lib/db'
 import { ZUserProgressImport, type UserCourseRecord } from '../types/curriculum'
@@ -256,6 +256,21 @@ export const SettingsPage: React.FC = () => {
             {hideDiagnosticsInMalla ? <EyeOff size={16} color="var(--color-steel)" /> : <Eye size={16} color="var(--color-terracotta)" />}
             {hideDiagnosticsInMalla ? 'Diagnósticos Ocultos' : 'Diagnósticos Visibles'}
           </button>
+        </div>
+      </div>
+
+      {/* Reglamento Estudiantil: Permanencia Académica */}
+      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(22, 163, 74, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <ShieldCheck size={20} color="#16A34A" />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Permanencia Académica (Reglamento Estudiantil)</h3>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              El <strong>promedio ponderado acumulado nunca puede ser inferior a 3.2</strong>. Si cae por debajo de este límite, se pierde la calidad de estudiante. Para alumnos de 1º semestre, el promedio de dicho período actúa como su acumulado inicial.
+            </p>
+          </div>
         </div>
       </div>
 

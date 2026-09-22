@@ -262,6 +262,30 @@ export interface GPAMetrics {
   semesterGPAs: Record<number, SemesterGPADetail>
 }
 
+export type AcademicStandingStatus = 'pending' | 'good' | 'risk'
+
+/**
+ * Evaluates academic standing according to student regulations:
+ * Minimum cumulative GPA must never fall below 3.2.
+ * For 1st semester students, the 1st period GPA acts as cumulative.
+ */
+export function getAcademicStanding(cumulativeGPA: number | null): {
+  status: AcademicStandingStatus
+  minRequired: number
+  difference: number | null
+} {
+  const minRequired = 3.2
+  if (cumulativeGPA === null) {
+    return { status: 'pending', minRequired, difference: null }
+  }
+  const difference = Math.round((cumulativeGPA - minRequired) * 100) / 100
+  return {
+    status: cumulativeGPA >= minRequired ? 'good' : 'risk',
+    minRequired,
+    difference
+  }
+}
+
 /**
  * Calculates weighted GPA per semester and cumulative GPA across the curriculum.
  * Only includes completed courses with >0 credits that have an explicit grade (0.0 to 5.0).

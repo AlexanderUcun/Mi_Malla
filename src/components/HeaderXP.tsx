@@ -1,9 +1,9 @@
 import React from 'react'
-import { Sparkles, Moon, Sun, FlaskConical } from 'lucide-react'
+import { Sparkles, Moon, Sun, FlaskConical, ShieldAlert } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 
 export const HeaderXP: React.FC = () => {
-  const { levelInfo, theme, toggleTheme, isSimulationMode, toggleSimulationMode } = useCurriculum()
+  const { levelInfo, theme, toggleTheme, isSimulationMode, toggleSimulationMode, gpaMetrics } = useCurriculum()
 
   return (
     <header
@@ -61,6 +61,27 @@ export const HeaderXP: React.FC = () => {
 
       {/* Simulation Badge & XP Progress Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {gpaMetrics?.cumulativeGPA !== null && gpaMetrics.cumulativeGPA < 3.2 && (
+          <div
+            title="Tu promedio acumulado está por debajo del límite de permanencia de 3.2 (Reglamento Estudiantil)"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: 'var(--radius-full)',
+              backgroundColor: '#FEE2E2',
+              border: '1px solid #FCA5A5',
+              color: '#DC2626',
+              fontSize: '11px',
+              fontWeight: 700
+            }}
+          >
+            <ShieldAlert size={14} color="#DC2626" />
+            <span>Riesgo (Prom. &lt; 3.2)</span>
+          </div>
+        )}
+
         {isSimulationMode && (
           <button
             onClick={toggleSimulationMode}

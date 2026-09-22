@@ -28,9 +28,13 @@ import {
   Rocket,
   Laptop,
   BookOpen,
-  HelpCircle
+  HelpCircle,
+  Shield,
+  ShieldAlert,
+  ShieldCheck
 } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
+import { getAcademicStanding } from '../lib/curriculumEngine'
 
 // Helper for contextual area icons styled in the official color palette
 const AREA_ICON_MAP: Record<string, { icon: React.FC<{ size?: number; color?: string; strokeWidth?: number }>; color: string; bg: string }> = {
@@ -127,6 +131,9 @@ export const AnalyticsPage: React.FC = () => {
     (d) => d.total > 0 && d.completed === d.total
   ).length
 
+  // Academic Standing evaluation (Minimum 3.2 Cumulative GPA)
+  const standing = getAcademicStanding(gpaMetrics.cumulativeGPA)
+
   return (
     <div
       style={{
@@ -154,11 +161,23 @@ export const AnalyticsPage: React.FC = () => {
         </div>
 
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '18px 20px', border: '1px solid var(--border-card)', boxShadow: 'var(--shadow-sm)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-terracotta)', marginBottom: '8px' }}>
-            <Sparkles size={22} />
-            <span style={{ fontSize: '13px', fontWeight: 700 }}>Promedio Acumulado</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--color-terracotta)' }}>
+              <Sparkles size={22} />
+              <span style={{ fontSize: '13px', fontWeight: 700 }}>Promedio Acumulado</span>
+            </div>
+            {standing.status === 'good' && (
+              <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: 'var(--radius-full)', backgroundColor: 'rgba(22, 163, 74, 0.12)', color: '#16A34A', border: '1px solid rgba(22, 163, 74, 0.25)' }}>
+                ≥ 3.2
+              </span>
+            )}
+            {standing.status === 'risk' && (
+              <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: 'var(--radius-full)', backgroundColor: '#FEE2E2', color: '#DC2626', border: '1px solid #FCA5A5' }}>
+                &lt; 3.2 Riesgo
+              </span>
+            )}
           </div>
-          <p style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '28px', fontWeight: 800, color: standing.status === 'risk' ? '#DC2626' : 'var(--text-primary)' }}>
             {gpaMetrics.cumulativeGPA !== null ? gpaMetrics.cumulativeGPA.toFixed(2) : 'N/A'}
           </p>
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -192,6 +211,103 @@ export const AnalyticsPage: React.FC = () => {
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
             Áreas 100% completadas
           </p>
+        </div>
+      </div>
+
+      {/* Tarjeta de Estado de Permanencia Académica (Reglamento Estudiantil) */}
+      <div
+        style={{
+          backgroundColor: 'var(--bg-card)',
+          borderRadius: 'var(--radius-lg)',
+          padding: cardPadding,
+          border: `1px solid ${
+            standing.status === 'risk'
+              ? '#FCA5A5'
+              : standing.status === 'good'
+              ? 'rgba(22, 163, 74, 0.3)'
+              : 'var(--border-card)'
+          }`,
+          boxShadow: 'var(--shadow-sm)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: '260px' }}>
+          <div
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor:
+                standing.status === 'risk'
+                  ? '#FEE2E2'
+                  : standing.status === 'good'
+                  ? 'rgba(22, 163, 74, 0.12)'
+                  : 'var(--bg-card-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}
+          >
+            {standing.status === 'risk' ? (
+              <ShieldAlert size={24} color="#DC2626" />
+            ) : standing.status === 'good' ? (
+              <ShieldCheck size={24} color="#16A34A" />
+            ) : (
+              <Shield size={24} color="var(--color-steel)" />
+            )}
+          </div>
+
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Estado de Permanencia Académica
+              </h3>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  padding: '2px 8px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor:
+                    standing.status === 'risk'
+                      ? '#FEE2E2'
+                      : standing.status === 'good'
+                      ? 'rgba(22, 163, 74, 0.12)'
+                      : 'var(--bg-card-muted)',
+                  color:
+                    standing.status === 'risk'
+                      ? '#DC2626'
+                      : standing.status === 'good'
+                      ? '#16A34A'
+                      : 'var(--text-secondary)'
+                }}
+              >
+                {standing.status === 'risk'
+                  ? '⚠️ Riesgo de Pérdida de Cupo (< 3.2)'
+                  : standing.status === 'good'
+                  ? '✓ En Permanencia (≥ 3.2)'
+                  : 'Pendiente de Evaluación'}
+              </span>
+            </div>
+
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              {standing.status === 'risk'
+                ? `ATENCIÓN: Tu promedio de ${gpaMetrics.cumulativeGPA?.toFixed(2)} está ${Math.abs(standing.difference || 0).toFixed(2)} puntos por debajo del mínimo de 3.2 exigido para mantener la calidad de estudiante.`
+                : standing.status === 'good'
+                ? `Tu promedio de ${gpaMetrics.cumulativeGPA?.toFixed(2)} está +${standing.difference?.toFixed(2)} puntos sobre el mínimo exigido de 3.2 en el Reglamento Estudiantil.`
+                : 'Registra tus notas en las asignaturas calificadas para verificar el cumplimiento de permanencia mínima (3.2 acumulado).'}
+            </p>
+          </div>
+        </div>
+
+        <div style={{ textAlign: isMobile ? 'left' : 'right' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>Regla de Permanencia</span>
+          <strong style={{ fontSize: '14px', color: 'var(--color-steel)' }}>Mínimo 3.2 Acumulado</strong>
         </div>
       </div>
 

@@ -8,7 +8,8 @@ import {
   calculateCurriculumMetrics,
   calculateGPAMetrics,
   getMinPassingGrade,
-  isGradePassing
+  isGradePassing,
+  getAcademicStanding
 } from '../curriculumEngine'
 import { calculateXP, calculateLevelInfo, evaluateUnlockedAchievements } from '../gamificationEngine'
 import type { CourseStatusType } from '../../types/curriculum'
@@ -161,6 +162,22 @@ describe('Curriculum Engine & DAG Verification', () => {
     expect(getMinPassingGrade(cont)).toBe(3.0)
     expect(isGradePassing(cont, 3.0)).toBe(true)
     expect(isGradePassing(cont, 2.9)).toBe(false)
+  })
+
+  it('should evaluate academic standing status against the 3.2 minimum cumulative GPA threshold', () => {
+    expect(getAcademicStanding(null).status).toBe('pending')
+    
+    const goodStanding = getAcademicStanding(3.45)
+    expect(goodStanding.status).toBe('good')
+    expect(goodStanding.difference).toBe(0.25)
+
+    const exactStanding = getAcademicStanding(3.2)
+    expect(exactStanding.status).toBe('good')
+    expect(exactStanding.difference).toBe(0)
+
+    const riskStanding = getAcademicStanding(3.15)
+    expect(riskStanding.status).toBe('risk')
+    expect(riskStanding.difference).toBe(-0.05)
   })
 })
 
