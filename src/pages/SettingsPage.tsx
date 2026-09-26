@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles, Eye, EyeOff, FileQuestion, ShieldCheck } from 'lucide-react'
+import { Download, Upload, FlaskConical, Moon, Sun, Share2, Sparkles, Eye, EyeOff, FileQuestion, ShieldCheck, Lock } from 'lucide-react'
 import { useCurriculum } from '../context/CurriculumContext'
 import { exportProgressJSON, bulkSaveCourseStatuses } from '../lib/db'
 import { ZUserProgressImport, type UserCourseRecord } from '../types/curriculum'
 import { ShareCardModal } from '../components/ShareCardModal'
 import { PWAInstallCard } from '../components/PWAInstallCard'
+import { PrivacyPolicyModal } from '../components/PrivacyPolicyModal'
 
 export const SettingsPage: React.FC = () => {
   const {
@@ -23,6 +24,8 @@ export const SettingsPage: React.FC = () => {
   const [importStatus, setImportStatus] = useState<string | null>(null)
   const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false)
   const [showShareModal, setShowShareModal] = useState<boolean>(false)
+  const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false)
+
 
   const handleExportJSON = async () => {
     try {
@@ -274,6 +277,41 @@ export const SettingsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Privacidad de Datos y Términos de Uso */}
+      <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(115, 72, 47, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Lock size={20} color="var(--color-terracotta)" />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Privacidad & Términos de Uso</h3>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              Tus datos son 100% locales en tu dispositivo. Conoce nuestra política y deslindes.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setShowPrivacyModal(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-full)',
+            border: '1px solid var(--color-terracotta)',
+            backgroundColor: '#FDF0EC',
+            color: 'var(--color-terracotta)',
+            fontWeight: 700,
+            fontSize: '12px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          Ver Políticas
+        </button>
+      </div>
+
       {/* Selector de Tema */}
       <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '24px', border: '1px solid var(--border-card)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
@@ -348,6 +386,13 @@ export const SettingsPage: React.FC = () => {
           </button>
         )}
       </div>
+
+      {/* Share Modal */}
+      {showShareModal && <ShareCardModal isOpen={showShareModal} onClose={() => setShowShareModal(false)} />}
+
+      {/* Privacy Policy & Terms Modal */}
+      <PrivacyPolicyModal isOpen={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} />
     </div>
   )
 }
+
