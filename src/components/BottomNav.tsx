@@ -8,6 +8,7 @@ export const BottomNav: React.FC = () => {
   return (
     <nav
       className="glass-panel"
+      aria-label="Navegación principal de la aplicación"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -36,6 +37,8 @@ export const BottomNav: React.FC = () => {
         {/* Item 1: Presentación PWA / Inicio */}
         <button
           onClick={() => setActiveTab('about')}
+          aria-label="Ir a la sección de Inicio"
+          aria-current={activeTab === 'about' ? 'page' : undefined}
           title="Ver presentación completa de Mi Malla PWA"
           style={{
             display: 'flex',
@@ -56,6 +59,8 @@ export const BottomNav: React.FC = () => {
         {/* Item 2: Malla */}
         <button
           onClick={() => setActiveTab('malla')}
+          aria-label="Ir a la Malla Curricular"
+          aria-current={activeTab === 'malla' ? 'page' : undefined}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -75,6 +80,8 @@ export const BottomNav: React.FC = () => {
         {/* Item 3: Logros */}
         <button
           onClick={() => setActiveTab('logros')}
+          aria-label="Ir a la Vitrina de Logros"
+          aria-current={activeTab === 'logros' ? 'page' : undefined}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -94,6 +101,8 @@ export const BottomNav: React.FC = () => {
         {/* Item 4: Métricas */}
         <button
           onClick={() => setActiveTab('analytics')}
+          aria-label="Ir a Métricas y Analíticas"
+          aria-current={activeTab === 'analytics' ? 'page' : undefined}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -113,6 +122,8 @@ export const BottomNav: React.FC = () => {
         {/* Item 5: Ajustes */}
         <button
           onClick={() => setActiveTab('settings')}
+          aria-label="Ir a Configuración y Ajustes"
+          aria-current={activeTab === 'settings' ? 'page' : undefined}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -130,5 +141,6 @@ export const BottomNav: React.FC = () => {
         </button>
       </div>
     </nav>
+
   )
 }

@@ -18,7 +18,10 @@ export const MallaPage: React.FC = () => {
   // Zoom Level State (range 0.6x to 1.25x)
   const [zoomScale, setZoomScale] = React.useState<number>(1.0)
   const zoomScaleRef = React.useRef<number>(1.0)
-  zoomScaleRef.current = zoomScale
+  React.useEffect(() => {
+    zoomScaleRef.current = zoomScale
+  }, [zoomScale])
+
 
   const containerRef = React.useRef<HTMLDivElement>(null)
   const touchStateRef = React.useRef<{

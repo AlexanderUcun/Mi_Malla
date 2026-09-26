@@ -2,6 +2,9 @@ import React from 'react'
 import { CurriculumProvider, useCurriculum } from './context/CurriculumContext'
 import { BottomNav } from './components/BottomNav'
 import { CourseDrawer } from './components/CourseDrawer'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { SkeletonLoader } from './components/SkeletonLoader'
+import { UndoToast } from './components/UndoToast'
 import { MallaPage } from './pages/MallaPage'
 import { LogrosPage } from './pages/LogrosPage'
 import { AnalyticsPage } from './pages/AnalyticsPage'
@@ -12,37 +15,18 @@ const MainContent: React.FC = () => {
   const { activeTab, isHydrating } = useCurriculum()
 
   if (isHydrating) {
-    return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-          <div
-            style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: 'var(--radius-md)',
-              backgroundColor: 'var(--bg-card)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: 'var(--shadow-md)',
-              animation: 'pulse 1.5s infinite'
-            }}
-          >
-            <img src="./logo.svg" alt="Loading logo" style={{ width: '36px', height: '36px' }} />
-          </div>
-          <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Cargando Mi Malla...</p>
-        </div>
-      </div>
-    )
+    return <SkeletonLoader />
   }
 
   return (
     <main style={{ flex: 1, paddingBottom: '96px' }}>
-      {activeTab === 'malla' && <MallaPage />}
-      {activeTab === 'logros' && <LogrosPage />}
-      {activeTab === 'analytics' && <AnalyticsPage />}
-      {activeTab === 'settings' && <SettingsPage />}
-      {activeTab === 'about' && <PWAPresentationPage />}
+      <ErrorBoundary fallbackMessage="Ocurrió un error al cargar esta sección. Puedes cambiar de pestaña o recargar.">
+        {activeTab === 'malla' && <MallaPage />}
+        {activeTab === 'logros' && <LogrosPage />}
+        {activeTab === 'analytics' && <AnalyticsPage />}
+        {activeTab === 'settings' && <SettingsPage />}
+        {activeTab === 'about' && <PWAPresentationPage />}
+      </ErrorBoundary>
     </main>
   )
 }
@@ -54,9 +38,11 @@ export function App() {
         <MainContent />
         <BottomNav />
         <CourseDrawer />
+        <UndoToast />
       </div>
     </CurriculumProvider>
   )
 }
 
 export default App
+

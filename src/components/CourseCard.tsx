@@ -125,8 +125,22 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     opacity = 1
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      if (focusedCourseCode !== course.code) {
+        setFocusedCourseCode(course.code)
+      }
+      setInspectedCourseCode(course.code)
+    }
+  }
+
   return (
     <motion.div
+      tabIndex={0}
+      role="button"
+      aria-label={`Materia ${displayName}, ${course.credits} créditos, Código ${course.code}, Estado: ${state}`}
+      onKeyDown={handleKeyDown}
       whileHover={{ scale: state === 'locked' ? 1 : 1.02 }}
       whileTap={{ scale: 0.98 }}
       onMouseEnter={handleMouseEnter}
@@ -134,6 +148,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       onTouchStart={handleTouchStart}
       onClick={handleCardClick}
       className="transition-all"
+
       style={{
         padding: '16px',
         borderRadius: 'var(--radius-md)',

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useMemo } from 'react'
+import React, { createContext, useState, useMemo } from 'react'
+
 import { useLiveQuery } from 'dexie-react-hooks'
 import {
   db,
@@ -366,10 +367,6 @@ export const CurriculumProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   )
 }
 
-export const useCurriculum = () => {
-  const context = useContext(CurriculumContext)
-  if (!context) {
-    throw new Error('useCurriculum must be used within a CurriculumProvider')
-  }
-  return context
-}
+export { CurriculumContext }
+export { useCurriculum } from '../hooks/useCurriculum'
+

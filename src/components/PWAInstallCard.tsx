@@ -9,25 +9,21 @@ interface BeforeInstallPromptEvent extends Event {
 
 export const PWAInstallCard: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-  const [isStandalone, setIsStandalone] = useState<boolean>(false)
-  const [isIOS, setIsIOS] = useState<boolean>(false)
+  const [isStandalone, setIsStandalone] = useState<boolean>(() => {
+
+    if (typeof window === 'undefined') return false
+    const isStandaloneMedia = window.matchMedia('(display-mode: standalone)').matches
+    const isIOSStandalone = (navigator as unknown as { standalone?: boolean }).standalone === true
+    return isStandaloneMedia || isIOSStandalone
+  })
+  const [isIOS] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())
+  })
 
   useEffect(() => {
-    // Check if already installed / running in standalone mode
-    const checkStandalone = () => {
-      const isStandaloneMedia = window.matchMedia('(display-mode: standalone)').matches
-      const isIOSStandalone = (navigator as unknown as { standalone?: boolean }).standalone === true
-      return isStandaloneMedia || isIOSStandalone
-    }
-
-    setIsStandalone(checkStandalone())
-
-    // Detect iOS
-    const userAgent = window.navigator.userAgent.toLowerCase()
-    const ios = /iphone|ipad|ipod/.test(userAgent)
-    setIsIOS(ios)
-
     // Capture beforeinstallprompt event (Android / Chrome / Edge)
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
